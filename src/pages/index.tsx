@@ -52,6 +52,7 @@ const Home = () => {
     e?.preventDefault()
     setIsBotResponding(true)
     setOnSendingMessage(true)
+    setIsAnimateMessage(true)
 
     setConversation((prevConversation) => {
       const newConversation: Message = {
@@ -194,6 +195,7 @@ const Home = () => {
     } finally {
       setOnSendingMessage(false)
       setIsBotResponding(false)
+      setIsAnimateMessage(false)
     }
   }
 
