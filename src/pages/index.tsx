@@ -1,5 +1,4 @@
 import ImageFallback from '@/components/ImageFallback'
-import ToastComponent from '@/components/ToastComponent'
 import AILoading from '@/modules/AILoading'
 import Conversation from '@/modules/Conversation'
 import FooterInput from '@/modules/FooterInput'
@@ -107,9 +106,6 @@ const Home = () => {
         const { value, done } = await reader.read()
 
         if (done) {
-          ToastComponent({ message: 'Stream has finished', type: 'success' })
-          // xử lí logic ở chỗ này
-          console.log('Stream has finished.')
           try {
             const parsedContent = JSON.parse(accumulatedContent.replace(`\n\n`, ''))
 
@@ -141,15 +137,10 @@ const Home = () => {
         }
 
         const lines = value?.split('\n')
-        ToastComponent({ message: '123', type: 'success' })
 
         // Split the chunk by newline to process each line
         for (const line of lines) {
-          ToastComponent({ message: '456', type: 'success' })
-
           if (line.startsWith('data: ')) {
-            ToastComponent({ message: '789', type: 'success' })
-
             try {
               const jsonData = JSON.parse(line.substring(6)) // Parse JSON data
               if (jsonData.content) {
@@ -205,9 +196,7 @@ const Home = () => {
       setIsBotResponding(false)
     }
   }
-  useEffect(() => {
-    ToastComponent({ message: 'VITE_API_URL' + import.meta.env.VITE_API_URL, type: 'success' })
-  }, [])
+
   const handleFetchingInitDataOfChating = async () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')

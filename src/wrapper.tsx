@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
+import 'fast-text-encoding'
 import { TranslationProvider } from './context/translationProvider'
 import { ActionTypes } from './store'
 
