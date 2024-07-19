@@ -5,7 +5,7 @@ import FooterInput from '@/modules/FooterInput'
 import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
-import { Message, TAllMessage, TClearData, TConversation } from '@/types'
+import { Message, TAllMessage, TClearData } from '@/types'
 import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -15,6 +15,8 @@ const Home = () => {
   const queryParams = new URLSearchParams(location.search)
   const tokenUrl = queryParams.get('token')
   const lang = queryParams.get('lang') || 'vi'
+  const serviceId = queryParams.get('serviceId')
+  const problem = queryParams.get('problem') || ''
 
   const tokenRedux = useSelector((state: any) => state.token)
   const token = tokenUrl || tokenRedux
@@ -23,13 +25,16 @@ const Home = () => {
   const [isBotResponding, setIsBotResponding] = useState(false)
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(problem)
+  console.log({ problem })
+  console.log({ message })
 
   const [conversation, setConversation] = useState<Message[]>([])
-  const [onDeteleting, setOnDeteleting] = useState(false)
-
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
+
+  const [onDeteleting, setOnDeteleting] = useState(false)
+
   const [clearData, setClearData] = useState<TClearData | null>(null)
 
   const [dataInitMessage, setDataInitMessage] = useState<TAllMessage>({
@@ -38,8 +43,6 @@ const Home = () => {
     created_at: ''
   })
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
-
-  const isDisabled = message.trim() === '' || isBotResponding
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -50,14 +53,14 @@ const Home = () => {
     // if (isDisabled) return
     if (message.length === 0) return
     e?.preventDefault()
-    setIsBotResponding(true)
+    setMessage('')
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
     setConversation((prevConversation) => {
       const newConversation: Message = {
         by_me: true,
-        content: message,
+        content: message.trim(),
         isDisable: true,
         type: 'text'
       }
@@ -78,14 +81,14 @@ const Home = () => {
   const handleSendMessageApi = async () => {
     try {
       const payload = {
-        content: message,
+        content: message.trim(),
         id: dataInitMessage?.id,
-        service_id: null
+        service_id: serviceId
       }
 
-      setMessage('')
+      setIsBotResponding(true)
 
-      const response = await fetch('https://local-sandbox-api-v1.vuatho.com/v1' + '/webview/extract-problem', {
+      const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,86 +104,52 @@ const Home = () => {
 
       const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
 
-      let accumulatedContent = '' // Initialize an empty string to accumulate the content
+      let accumulatedContent = ''
+      let tempContent = ''
 
       while (true) {
         const { value, done } = await reader.read()
-
         if (done) {
-          try {
-            const parsedContent = JSON.parse(accumulatedContent.replace(`\n\n`, ''))
+          const extractJSON = (input: string) => {
+            const regex = /\[{(.*?)\}\]/s
+            const match = input.match(regex)
+            return match ? match[0] : null
+          }
 
-            if (Array.isArray(parsedContent) && parsedContent[0].isClear) {
-              setConversation((prevConversation) => {
-                //delete content = '...'
-                const itemIsClear = parsedContent.find((item) => item.isClear)
-                if (!itemIsClear) return prevConversation
-                console.log({ itemIsClear })
-                setClearData(itemIsClear)
-
-                const newConversation = prevConversation.filter((conversation) => !(conversation.content === '...'))
-
-                return [
-                  ...newConversation,
-                  {
-                    by_me: false,
-                    content: itemIsClear?.translated_summarizeProblem,
-                    isDisable: true,
-                    type: 'text'
-                  }
-                ]
-              })
-            }
-          } catch (error) {
-            console.error('JSON parse error:', error)
+          const content: any = JSON?.parse?.(extractJSON?.(tempContent) || '')
+          if (content?.[0]?.isClear) {
+            setClearData(content?.[0])
           }
           break
         }
-
+        // streaming data
         const lines = value?.split('\n')
-
-        // Split the chunk by newline to process each line
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             try {
-              const jsonData = JSON.parse(line.substring(6)) // Parse JSON data
+              const jsonData = JSON.parse(line.substring(6))
               if (jsonData.content) {
-                accumulatedContent += jsonData.content // Accumulate the content
-
-                if (accumulatedContent.replace(`\n\n`, '').startsWith(`[`)) {
-                  console.log('......--------........')
-                }
-                // Check if the accumulated content is long enough
-
-                // Update the state with the new content
+                accumulatedContent += jsonData.content
+                tempContent += jsonData.content
                 setConversation((prevConversation) => {
                   // if has `[` add  content = '...' to render UI
+                  const index = accumulatedContent.indexOf('[{')
+                  const result = index !== -1 ? accumulatedContent.substring(0, index) : accumulatedContent
                   let newConversation: Message = {
                     by_me: false,
-                    content: accumulatedContent.replace(`\n\n`, '').includes(`[`) ? '...' : accumulatedContent.replace(`\n\n`, ''),
+                    content: result.replace(`\n\n`, ''),
                     isDisable: true,
                     type: 'text'
                   }
-
-                  // Kiểm tra nếu cuộc trò chuyện trước đó có ít nhất một tin nhắn và tin nhắn cuối cùng không phải từ AI
                   if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
-                    // Tạo một bản sao của mảng trước đó để không làm thay đổi trực tiếp
                     const updatedConversation = [...prevConversation]
-
-                    // if (prevConversation[prevConversation.length - 1]?.content.startsWith(`[{`)) {
-                    //   console.log('adsadsadsads')
-                    //   newConversation = { ...newConversation, content: '' }
-                    // }
-
-                    // Thay đổi nội dung của tin nhắn cuối cùng trong mảng updatedConversation thành tin nhắn mới nhất từ AI
                     updatedConversation[updatedConversation.length - 1] = newConversation
-
-                    // Trả về mảng đã được cập nhật
+                    if (newConversation.content.includes(`[`)) {
+                      newConversation = { ...newConversation, content: '...' }
+                    }
                     return updatedConversation
                   }
-                  //
-                  console.log({ accumulatedContent })
-                  // Nếu không có tin nhắn từ AI hoặc không có tin nhắn nào trong cuộc trò chuyện trước đó, thêm tin nhắn mới vào cuối mảng
+
                   return [...prevConversation, newConversation]
                 })
               }
@@ -202,18 +171,13 @@ const Home = () => {
   const handleFetchingInitDataOfChating = async () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
-
       setDataInitMessage(data)
-
       setConversation(data.data)
-
-      if (data.clear_data) {
-        setClearData(data?.clear_data?.[0])
-      }
     } catch (error) {
       console.log(error)
     }
   }
+
   //handle call api delete history
   const handleDeleteChatHistory = async () => {
     try {
@@ -225,7 +189,6 @@ const Home = () => {
       setConversation([])
       setMessage('')
       setClearData(null)
-
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
@@ -237,10 +200,6 @@ const Home = () => {
     onFetchingInitChat && handleFetchingInitDataOfChating()
   }, [onFetchingInitChat])
 
-  useEffect(() => {
-    setOnFetchingInitChat(true)
-  }, [])
-
   //handle send message
   useEffect(() => {
     onSendingMessage && handleSendMessageApi()
@@ -250,6 +209,17 @@ const Home = () => {
   useEffect(() => {
     onDeteleting && handleDeleteChatHistory()
   }, [onDeteleting])
+
+  useEffect(() => {
+    if (serviceId || problem) {
+      setOnSendingMessage(true)
+      setOnDeteleting(true)
+    } else {
+      setOnFetchingInitChat(true)
+    }
+  }, [])
+
+  useEffect(() => {}, [isLoadingAI])
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
@@ -283,7 +253,7 @@ const Home = () => {
         message={message}
         handleChangeValue={handleChangeValue}
         handleSendMessage={handleSendMessage}
-        isDisabled={isDisabled}
+        isDisabled={isBotResponding}
         clearData={clearData}
       />
     </div>

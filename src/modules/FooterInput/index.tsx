@@ -19,6 +19,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
+  const dataIsClear = clearData?.isClear
   const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     handleSendMessage()
@@ -44,7 +45,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   return (
     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.5 }} className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'>
-      {clearData?.isClear ? (
+      {dataIsClear ? (
         <div className='p-4'>
           <IndustryItem
             accurate_percent={clearData?.accurate_percent}

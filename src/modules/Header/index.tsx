@@ -17,6 +17,9 @@ type HeaderProps = {
   setIsOpenModalConfirmDelete: (value: boolean) => void
 }
 const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete }) => {
+  const queryParams = new URLSearchParams(location.search)
+  const serviceName = queryParams.get('serviceName')
+
   const isHasMessage = useMemo(() => {
     return conversation.length > 0
   }, [conversation])
@@ -45,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         >
           <ArrowLeft2 />
         </ButtonOnlyIcon>
-        <p className='justify-between text-center text-base font-bold'>AI Vua thợ</p>
+        <p className='justify-between text-center text-base font-bold'>{serviceName ? serviceName : 'AI Vua thợ'} </p>
         <ButtonOnlyIcon
           className={`outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0 ${isHasMessage ? 'opacity-100' : 'opacity-0'}`}
           onPress={handleClick}

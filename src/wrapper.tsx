@@ -14,8 +14,6 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const lang = queryParams.get('lang') || 'vi'
 
   const checkSession = useCallback(async () => {
-    console.log('daszzcxzczxccxzczx')
-
     if (token) {
       dispatch({
         type: 'token',

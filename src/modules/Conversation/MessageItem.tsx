@@ -25,6 +25,8 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
         viewport: { once: true }
       }
     : {}
+
+  if (msg === '') return null
   return (
     <div className={`flex items-end gap-1 ${isBot ? 'justify-start' : 'justify-end'}`}>
       {isBot && (
