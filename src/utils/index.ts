@@ -72,17 +72,22 @@ const formatLocalTime = (time: string) => {
 const formatDDMMYYYY = (time: string) => {
   return moment(time).format('DD/MM/YYYY')
 }
-type MessageInput = string | { message: string; data?: any }
 
-const postMessageCustom = (input: MessageInput) => {
-  // Xác định giá trị của message từ input
-  const message = typeof input === 'string' ? input : input.message
-  const data = typeof input === 'string' ? null : input.data
-
+const postMessageCustom = ({ message, data }: { message: string; data?: any }) => {
+  ToastComponent({
+    message: JSON.stringify({
+      message,
+      data
+    }),
+    type: 'error'
+  })
   //@ts-ignore
   if (window?.vuatho) {
     //@ts-ignore
-    window?.vuatho?.postMessage({ message, data })
+    window?.vuatho?.postMessage({
+      message,
+      data
+    })
   } else {
     ToastComponent({ message: message || 'has bug here', type: 'error' })
   }
