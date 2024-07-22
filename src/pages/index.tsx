@@ -151,7 +151,6 @@ const Home = () => {
                   //khi text cắt ra mà không có content
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                   if (index !== -1) {
-                    //khang
                     setIsAnimationClearData(true)
                     console.log('123')
                   }
@@ -163,6 +162,7 @@ const Home = () => {
                     isDisable: true,
                     type: 'text'
                   }
+
                   if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
                     const updatedConversation = [...prevConversation]
                     updatedConversation[updatedConversation.length - 1] = newConversation

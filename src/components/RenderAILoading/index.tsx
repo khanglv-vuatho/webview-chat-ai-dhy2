@@ -18,7 +18,7 @@ const AnimateAIGenerating = () => {
       animationData: animationJson
     })
 
-    instance.setSpeed(6)
+    instance.setSpeed(5)
 
     return () => instance.destroy()
   }, [])
