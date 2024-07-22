@@ -185,7 +185,6 @@ const Home = () => {
       const { data }: any = await instance.get('/webview/extract-problem')
       setDataInitMessage(data)
 
-      console.log({ data })
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
 
@@ -196,9 +195,8 @@ const Home = () => {
             isDisable: true,
             type: 'text'
           }
-          const userMessage: Message = data?.data?.[0]
 
-          return [userMessage, botMessage]
+          return [...data.data, botMessage]
         })
       } else {
         setConversation(data.data)
