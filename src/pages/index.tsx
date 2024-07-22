@@ -294,7 +294,7 @@ const Home = () => {
         message={message}
         handleChangeValue={handleChangeValue}
         handleSendMessage={handleSendMessage}
-        isDisabled={isBotResponding}
+        isDisabled={isBotResponding || !message.length}
         clearData={clearData}
         isAnimationClearData={isAnimationClearData}
       />
