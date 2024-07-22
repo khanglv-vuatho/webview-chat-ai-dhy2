@@ -1,7 +1,7 @@
 import { PrimaryButton } from '@/components/Buttons'
 
 import { TClearData } from '@/types'
-import { postMessageCustom } from '@/utils'
+import { capitalizeWords, postMessageCustom } from '@/utils'
 import { lazy, memo, Suspense, useState } from 'react'
 
 const RenderAILoading = lazy(() => import('@/components/RenderAILoading'))
@@ -19,7 +19,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[16px_16px_32px_0px_#C1C1C129]'>
-      <p className='font-bold'>{clear_data?.translated_workerName}</p>
+      <p className='font-bold'>{capitalizeWords(clear_data?.translated_workerName || '')}</p>
       <div className='flex flex-col'>
         <p className='text-sm'>Giá kham khảo</p>
         <p className='font-semibold text-primary-yellow'>

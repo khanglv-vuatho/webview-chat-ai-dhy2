@@ -164,7 +164,6 @@ const Home = () => {
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                   if (index !== -1) {
                     setIsAnimationClearData(true)
-                    console.log('khang')
                   }
                   const result = index !== -1 ? text : accumulatedContent
 
@@ -207,7 +206,10 @@ const Home = () => {
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
         setIsAnimationClearData(true)
-        console.log('456')
+
+        setTimeout(() => {
+          setIsAnimationClearData(false)
+        }, 4000)
 
         setConversation(() => {
           const botMessage: Message = {
@@ -222,7 +224,6 @@ const Home = () => {
       } else {
         setConversation(data.data)
         setIsAnimationClearData(false)
-        console.log('787')
       }
     } catch (error) {
       console.log(error)
