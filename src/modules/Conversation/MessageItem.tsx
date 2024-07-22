@@ -71,6 +71,7 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                   props: {
                     style: {
                       listStyleType: 'disc',
+                      marginTop: '4px',
                       paddingLeft: '20px'
                     }
                   }
@@ -80,8 +81,9 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                   props: {
                     style: {
                       listStyleType: 'decimal',
-                      paddingLeft: '20px',
-                      marginTop: '10px'
+                      paddingLeft: '4px',
+                      marginTop: '10px',
+                      listStylePosition: 'inside'
                     }
                   }
                 },
