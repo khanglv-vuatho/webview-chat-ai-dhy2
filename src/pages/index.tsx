@@ -29,7 +29,6 @@ const Home = () => {
   const [message, setMessage] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
   console.log({ message })
-  console.log(isHasProblem ? problem : '')
 
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
@@ -68,7 +67,10 @@ const Home = () => {
       return [...prevConversation, newConversation]
     })
 
-    inputRef?.current?.focus()
+    if (inputRef.current) {
+      inputRef.current.selectionStart = inputRef.current.selectionEnd = message.trim().length
+      inputRef?.current?.focus()
+    }
   }
 
   const handleReset = useCallback(() => {
@@ -82,12 +84,13 @@ const Home = () => {
   const handleSendMessageApi = async () => {
     try {
       const payload = {
-        content: message.trim(),
+        content: isFirstSendMessage && isHasProblem ? '' : message.trim(),
         id: dataInitMessage?.id,
         service_id: serviceId
       }
+      console.log('isFirstSendMessage && isHasProblem', isFirstSendMessage && isHasProblem)
 
-      if (isFirstSendMessage) {
+      if (isFirstSendMessage && isHasProblem) {
         console.log('123')
       } else {
         setMessage('')
@@ -214,7 +217,7 @@ const Home = () => {
     } finally {
       //handle reset state chat
       setConversation([])
-      if (isFirstSendMessage) {
+      if (isFirstSendMessage && isHasProblem) {
         console.log('ads')
       } else {
         setMessage('')
