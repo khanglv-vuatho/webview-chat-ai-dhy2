@@ -13,9 +13,10 @@ type FooterInputType = {
   handleSendMessage: () => void
   isDisabled: boolean
   clearData: TClearData | null
+  isAnimationClearData: boolean
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData }) => {
+const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -48,7 +49,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.5 }} className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'>
       {dataIsClear ? (
         <div className='p-4'>
-          <IndustryItem clear_data={clearData} />
+          <IndustryItem clear_data={clearData} isAnimationClearData={isAnimationClearData} />
         </div>
       ) : (
         <div className='pt-2'>

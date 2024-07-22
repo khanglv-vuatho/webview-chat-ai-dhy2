@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-
+import Markdown from 'markdown-to-jsx'
 import ImageFallback from '@/components/ImageFallback'
-import { memo } from 'react'
+import React, { memo } from 'react'
 
 type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean }
 const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage }) => {
@@ -58,9 +58,47 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
         </motion.div>
       ) : (
         <motion.div {...motionProps} className={`max-w-[70%] break-words rounded-lg p-2 px-3 ${isBot ? 'relative bg-primary-light-gray' : 'bg-[#FFFAEA]'}`}>
-          <pre className='font-inter break-words' style={{ whiteSpace: 'pre-wrap' }}>
+          <Markdown
+            options={{
+              overrides: {
+                component: ({ children, ...props }) => {
+                  // Kết hợp strong với các phần tử tiếp theo
+                  const text = React.Children.toArray(children).join('')
+                  return <strong {...props}>{text}</strong>
+                },
+                ul: {
+                  component: 'ul',
+                  props: {
+                    style: {
+                      listStyleType: 'disc',
+                      paddingLeft: '20px'
+                    }
+                  }
+                },
+                ol: {
+                  component: 'ol',
+                  props: {
+                    style: {
+                      listStyleType: 'decimal',
+                      paddingLeft: '20px',
+                      marginTop: '10px'
+                    }
+                  }
+                },
+                li: {
+                  component: 'li',
+                  props: {
+                    style: {
+                      marginBottom: '10px'
+                    }
+                  }
+                }
+              },
+              forceBlock: true
+            }}
+          >
             {msg}
-          </pre>
+          </Markdown>
         </motion.div>
       )}
     </div>

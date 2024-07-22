@@ -6,8 +6,10 @@ import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData } from '@/types'
-import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+const RenderAILoading = lazy(() => import('@/components/RenderAILoading'))
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
@@ -32,6 +34,7 @@ const Home = () => {
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
+  const [isAnimationClearData, setIsAnimationClearData] = useState(false)
 
   const [onDeteleting, setOnDeteleting] = useState(false)
 
@@ -65,6 +68,7 @@ const Home = () => {
         isDisable: true,
         type: 'text'
       }
+
       return [...prevConversation, newConversation]
     })
 
@@ -116,8 +120,8 @@ const Home = () => {
 
       while (true) {
         const { value, done } = await reader.read()
-        console.log({ done })
         if (done) {
+          setIsAnimationClearData(false)
           const extractJSON = (input: string) => {
             const regex = /\[{(.*?)\}\]/s
             const match = input.match(regex)
@@ -143,11 +147,16 @@ const Home = () => {
                 tempContent += jsonData.content
                 setConversation((prevConversation) => {
                   // if has `[` add  content = '...' to render UI
-                  const index = accumulatedContent.indexOf('[{')
+                  const index = accumulatedContent.indexOf('[')
                   //khi text cắt ra mà không có content
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
+                  if (index !== -1) {
+                    //khang
+                    setIsAnimationClearData(true)
+                    console.log('123')
+                  }
                   const result = index !== -1 ? text : accumulatedContent
-                  console.log(accumulatedContent.substring(0, index))
+
                   let newConversation: Message = {
                     by_me: false,
                     content: result.replace(`\n\n`, ''),
@@ -185,6 +194,8 @@ const Home = () => {
 
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
+        setIsAnimationClearData(true)
+        console.log('456')
 
         setConversation(() => {
           const botMessage: Message = {
@@ -201,6 +212,9 @@ const Home = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsAnimationClearData(false)
+      console.log('787')
     }
   }
 
@@ -246,7 +260,7 @@ const Home = () => {
       setOnFetchingInitChat(true)
     }
   }, [])
-
+  console.log({ conversation })
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
       <Header
@@ -273,6 +287,7 @@ const Home = () => {
           </div>
         )}
       </div>
+
       <FooterInput
         conversation={conversation}
         isBotResponding={isBotResponding}
@@ -281,6 +296,7 @@ const Home = () => {
         handleSendMessage={handleSendMessage}
         isDisabled={isBotResponding}
         clearData={clearData}
+        isAnimationClearData={isAnimationClearData}
       />
     </div>
   )
