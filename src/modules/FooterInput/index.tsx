@@ -71,7 +71,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               classNames={{
                 base: 'px-4',
                 innerWrapper: 'items-end',
-                input: 'text-sm text-primary-base placeholder:pl-1 pb-1',
+                input: 'text-sm text-primary-base placeholder:pl-1 pb-1 caret-primary-yellow',
                 inputWrapper:
                   'p-1 !min-h-14 border-none bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-0 group-data-[focus-visible=true]:ring-offset-background shadow-none'
               }}
