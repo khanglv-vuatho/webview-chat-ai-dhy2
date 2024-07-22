@@ -34,18 +34,35 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
           <ImageFallback src='/robot.png' className={`size-full scale-85`} />
         </div>
       )}
-      <motion.div {...motionProps} className={`max-w-[70%] break-words rounded-lg p-2 px-3 ${isBot ? 'relative bg-primary-light-gray' : 'bg-[#FFFAEA]'}`}>
-        {/* {isBot ? (
-          <TypewriterEffect words={msg} onComplete={onComplete} />
-        ) : (
+
+      {isBot && msg === '...' ? (
+        <motion.div className={`flex h-10 items-center gap-1 rounded-lg bg-blue-100 px-2`}>
+          {Array(3)
+            .fill(0)
+            .map((_, index) => (
+              <motion.div
+                key={index}
+                className='h-1.5 w-1.5 rounded-full bg-primary-black'
+                animate={{
+                  y: [0, -4, 0],
+                  transition: {
+                    delay: index * 0.1,
+                    duration: 0.3,
+                    ease: 'easeInOut',
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }
+                }}
+              />
+            ))}
+        </motion.div>
+      ) : (
+        <motion.div {...motionProps} className={`max-w-[70%] break-words rounded-lg p-2 px-3 ${isBot ? 'relative bg-primary-light-gray' : 'bg-[#FFFAEA]'}`}>
           <pre className='font-inter break-words' style={{ whiteSpace: 'pre-wrap' }}>
             {msg}
           </pre>
-        )} */}
-        <pre className='font-inter break-words' style={{ whiteSpace: 'pre-wrap' }}>
-          {msg}
-        </pre>
-      </motion.div>
+        </motion.div>
+      )}
     </div>
   )
 }

@@ -16,7 +16,8 @@ const Home = () => {
   const tokenUrl = queryParams.get('token')
   const lang = queryParams.get('lang') || 'vi'
   const serviceId = queryParams.get('serviceId')
-  const problem = queryParams.get('problem') || ''
+  const problem = queryParams.get('problem')
+  const isHasProblem = problem !== null
 
   const tokenRedux = useSelector((state: any) => state.token)
   const token = tokenUrl || tokenRedux
@@ -25,9 +26,7 @@ const Home = () => {
   const [isBotResponding, setIsBotResponding] = useState(false)
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
-  const [message, setMessage] = useState(problem)
-  console.log({ problem })
-  console.log({ message })
+  const [message, setMessage] = useState(isHasProblem ? problem : '')
 
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
@@ -42,6 +41,7 @@ const Home = () => {
     clear_data: null,
     created_at: ''
   })
+
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +50,8 @@ const Home = () => {
   }
 
   const handleSendMessage = (e?: React.MouseEvent<HTMLButtonElement>) => {
-    // if (isDisabled) return
     if (message.length === 0) return
     e?.preventDefault()
-    setMessage('')
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
@@ -85,7 +83,7 @@ const Home = () => {
         id: dataInitMessage?.id,
         service_id: serviceId
       }
-
+      setMessage('')
       setIsBotResponding(true)
 
       const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
@@ -109,6 +107,7 @@ const Home = () => {
 
       while (true) {
         const { value, done } = await reader.read()
+        console.log({ done })
         if (done) {
           const extractJSON = (input: string) => {
             const regex = /\[{(.*?)\}\]/s
@@ -117,8 +116,10 @@ const Home = () => {
           }
 
           const content: any = JSON?.parse?.(extractJSON?.(tempContent) || '')
+
           if (content?.[0]?.isClear) {
             setClearData(content?.[0])
+            console.log(content?.[0])
           }
           break
         }
@@ -134,7 +135,10 @@ const Home = () => {
                 setConversation((prevConversation) => {
                   // if has `[` add  content = '...' to render UI
                   const index = accumulatedContent.indexOf('[{')
-                  const result = index !== -1 ? accumulatedContent.substring(0, index) : accumulatedContent
+                  //khi text cắt ra mà không có content
+                  const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
+                  const result = index !== -1 ? text : accumulatedContent
+                  console.log(accumulatedContent.substring(0, index))
                   let newConversation: Message = {
                     by_me: false,
                     content: result.replace(`\n\n`, ''),
@@ -144,9 +148,6 @@ const Home = () => {
                   if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
                     const updatedConversation = [...prevConversation]
                     updatedConversation[updatedConversation.length - 1] = newConversation
-                    if (newConversation.content.includes(`[`)) {
-                      newConversation = { ...newConversation, content: '...' }
-                    }
                     return updatedConversation
                   }
 
@@ -172,7 +173,25 @@ const Home = () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
       setDataInitMessage(data)
-      setConversation(data.data)
+
+      console.log({ data })
+      if (data?.clear_data) {
+        setClearData(data.clear_data?.[0])
+
+        setConversation(() => {
+          const botMessage: Message = {
+            by_me: false,
+            content: data.clear_data?.[0]?.message,
+            isDisable: true,
+            type: 'text'
+          }
+          const userMessage: Message = data?.data?.[0]
+
+          return [userMessage, botMessage]
+        })
+      } else {
+        setConversation(data.data)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -218,8 +237,6 @@ const Home = () => {
       setOnFetchingInitChat(true)
     }
   }, [])
-
-  useEffect(() => {}, [isLoadingAI])
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>

@@ -17,7 +17,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ workname, range, problem, c
       <div className='flex flex-col'>
         <p className='text-sm'>Giá kham khảo</p>
         <p className='font-semibold text-primary-yellow'>
-          {range?.[0]} - {range?.[1]}
+          {range?.[0].toLocaleString('en-US')} - {range?.[1].toLocaleString('en-US')}
           {currency_symbol}
         </p>
         <p className='text-primary-green'>{accurate_percent}% đúng giá thị trường</p>
