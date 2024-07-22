@@ -78,6 +78,7 @@ const postMessageCustom = (input: MessageInput) => {
   // Xác định giá trị của message từ input
   const message = typeof input === 'string' ? input : input.message
   const data = typeof input === 'string' ? null : input.data
+  ToastComponent({ message: JSON.stringify({ message, data }) || 'has bug here', type: 'error' })
 
   //@ts-ignore
   if (window?.vuatho) {
