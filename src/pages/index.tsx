@@ -27,6 +27,9 @@ const Home = () => {
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
   const [message, setMessage] = useState(isHasProblem ? problem : '')
+  const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
+  console.log({ message })
+  console.log(isHasProblem ? problem : '')
 
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
@@ -83,9 +86,14 @@ const Home = () => {
         id: dataInitMessage?.id,
         service_id: serviceId
       }
-      setMessage('')
-      setIsBotResponding(true)
 
+      if (isFirstSendMessage) {
+        console.log('123')
+      } else {
+        setMessage('')
+      }
+      setIsBotResponding(true)
+      setIsFirstSendMessage(false)
       const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
         method: 'POST',
         headers: {
@@ -206,7 +214,11 @@ const Home = () => {
     } finally {
       //handle reset state chat
       setConversation([])
-      setMessage('')
+      if (isFirstSendMessage) {
+        console.log('ads')
+      } else {
+        setMessage('')
+      }
       setClearData(null)
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
