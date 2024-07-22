@@ -48,13 +48,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.5 }} className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'>
       {dataIsClear ? (
         <div className='p-4'>
-          <IndustryItem
-            accurate_percent={clearData?.accurate_percent}
-            currency_symbol={clearData?.currency_symbol}
-            problem={clearData?.translated_summarizeProblem}
-            range={clearData?.range}
-            workname={clearData?.translated_workerName}
-          />
+          <IndustryItem clear_data={clearData} />
         </div>
       ) : (
         <div className='pt-2'>
