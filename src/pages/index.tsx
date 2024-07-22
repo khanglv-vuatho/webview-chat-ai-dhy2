@@ -121,7 +121,6 @@ const Home = () => {
       while (true) {
         const { value, done } = await reader.read()
         if (done) {
-          setIsAnimationClearData(false)
           const extractJSON = (input: string) => {
             const regex = /\[{(.*?)\}\]/s
             const match = input.match(regex)
@@ -132,8 +131,21 @@ const Home = () => {
 
           if (content?.[0]?.isClear) {
             setClearData(content?.[0])
-            console.log(content?.[0])
+            setConversation((prev) => {
+              const data = prev.map((item) => {
+                if (item.content === '...') {
+                  item.content = content?.[0]?.message
+                  return item
+                }
+                return item
+              })
+              setIsAnimationClearData(false)
+              return [...data]
+            })
           }
+
+          setIsAnimationClearData(false)
+
           break
         }
         // streaming data
@@ -152,7 +164,7 @@ const Home = () => {
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                   if (index !== -1) {
                     setIsAnimationClearData(true)
-                    console.log('123')
+                    console.log('khang')
                   }
                   const result = index !== -1 ? text : accumulatedContent
 
@@ -209,14 +221,15 @@ const Home = () => {
         })
       } else {
         setConversation(data.data)
+        setIsAnimationClearData(false)
+        console.log('787')
       }
     } catch (error) {
       console.log(error)
-    } finally {
-      setIsAnimationClearData(false)
-      console.log('787')
     }
   }
+
+  console.log({ isAnimationClearData })
 
   //handle call api delete history
   const handleDeleteChatHistory = async () => {
@@ -234,6 +247,7 @@ const Home = () => {
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
+      setIsAnimationClearData(false)
     }
   }
 
@@ -260,7 +274,7 @@ const Home = () => {
       setOnFetchingInitChat(true)
     }
   }, [])
-  console.log({ conversation })
+
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
       <Header

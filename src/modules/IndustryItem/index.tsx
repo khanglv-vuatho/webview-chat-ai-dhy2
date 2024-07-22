@@ -46,4 +46,4 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
   )
 }
 
-export default memo(IndustryItem)
+export default IndustryItem
