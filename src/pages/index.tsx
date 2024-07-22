@@ -28,7 +28,6 @@ const Home = () => {
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
   const [message, setMessage] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
-  console.log({ message })
 
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
@@ -37,6 +36,8 @@ const Home = () => {
   const [onDeteleting, setOnDeteleting] = useState(false)
 
   const [clearData, setClearData] = useState<TClearData | null>(null)
+
+  const isFristSendMessageAndHasProblem = isFirstSendMessage && isHasProblem
 
   const [dataInitMessage, setDataInitMessage] = useState<TAllMessage>({
     data: [],
@@ -84,15 +85,12 @@ const Home = () => {
   const handleSendMessageApi = async () => {
     try {
       const payload = {
-        content: isFirstSendMessage && isHasProblem ? '' : message.trim(),
+        content: isFristSendMessageAndHasProblem ? '' : message.trim(),
         id: dataInitMessage?.id,
         service_id: serviceId
       }
-      console.log('isFirstSendMessage && isHasProblem', isFirstSendMessage && isHasProblem)
 
-      if (isFirstSendMessage && isHasProblem) {
-        console.log('123')
-      } else {
+      if (!isFristSendMessageAndHasProblem) {
         setMessage('')
       }
       setIsBotResponding(true)
@@ -215,9 +213,7 @@ const Home = () => {
     } finally {
       //handle reset state chat
       setConversation([])
-      if (isFirstSendMessage && isHasProblem) {
-        console.log('ads')
-      } else {
+      if (!isFristSendMessageAndHasProblem) {
         setMessage('')
       }
       setClearData(null)
