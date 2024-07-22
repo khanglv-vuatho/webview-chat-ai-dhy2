@@ -1,13 +1,12 @@
-'use client'
-
 import lottie from 'lottie-web'
 import { memo, useEffect, useRef } from 'react'
 
-import animationJson from '@/JSONAnimation/ai-generating.json'
+import animationJson from '@/lotties/ai-generating.json'
 
 const RenderAILoading = () => {
   return <AnimateAIGenerating />
 }
+
 const AnimateAIGenerating = () => {
   const container = useRef(null)
   useEffect(() => {
