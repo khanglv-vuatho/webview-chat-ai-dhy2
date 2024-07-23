@@ -60,6 +60,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               maxRows={3}
               autoFocus
               ref={inputRef}
+              maxLength={500}
               value={message}
               onChange={handleChangeValue}
               radius='none'
