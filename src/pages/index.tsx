@@ -205,9 +205,6 @@ const Home = () => {
               }
             } catch (error) {
               console.error('JSON parse error:', error)
-            } finally {
-              setIsBotResponding(false)
-              setIsAnimationClearData(false)
             }
           }
         }
@@ -216,6 +213,7 @@ const Home = () => {
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
+      setIsBotResponding(false)
       setIsAnimateMessage(false)
     }
   }
