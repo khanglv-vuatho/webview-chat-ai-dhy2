@@ -1,4 +1,5 @@
 import ImageFallback from '@/components/ImageFallback'
+import RenderAILoading from '@/components/RenderAILoading'
 import AILoading from '@/modules/AILoading'
 import Conversation from '@/modules/Conversation'
 import FooterInput from '@/modules/FooterInput'
@@ -160,6 +161,7 @@ const Home = () => {
               return [...data]
             })
           }
+
           setIsBotResponding(false)
           setIsAnimationClearData(false)
 
@@ -202,6 +204,9 @@ const Home = () => {
               }
             } catch (error) {
               console.error('JSON parse error:', error)
+            } finally {
+              setIsBotResponding(false)
+              setIsAnimationClearData(false)
             }
           }
         }
@@ -329,7 +334,6 @@ const Home = () => {
           </div>
         )}
       </div>
-
       <FooterInput
         conversation={conversation}
         isBotResponding={isBotResponding}
