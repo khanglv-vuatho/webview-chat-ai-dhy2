@@ -15,8 +15,9 @@ type HeaderProps = {
   onDeteleting: boolean
   isOpenModalConfirmDelete: boolean
   setIsOpenModalConfirmDelete: (value: boolean) => void
+  isDisable: boolean
 }
-const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete }) => {
+const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete, isDisable }) => {
   const queryParams = new URLSearchParams(location.search)
   const serviceName = queryParams.get('serviceName')
 
@@ -57,6 +58,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         </ButtonOnlyIcon>
         <p className='justify-between text-center text-base font-bold'>{serviceName ? serviceName : 'AI Vua thợ'} </p>
         <ButtonOnlyIcon
+          isDisabled={isDisable}
           className={`outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0 ${isHasMessage ? 'opacity-100' : 'opacity-0'}`}
           onPress={handleClick}
         >

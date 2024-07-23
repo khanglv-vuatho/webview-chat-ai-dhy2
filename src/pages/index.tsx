@@ -291,6 +291,7 @@ const Home = () => {
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
       <Header
+        isDisable={isBotResponding}
         handleReset={handleReset}
         conversation={conversation}
         onDeteleting={onDeteleting}
