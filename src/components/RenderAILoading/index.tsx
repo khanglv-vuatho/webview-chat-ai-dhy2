@@ -22,7 +22,7 @@ const AnimateAIGenerating = ({ className }: Props) => {
       }
     })
 
-    instance.setSpeed(6)
+    instance.setSpeed(10)
 
     return () => instance.destroy()
   }, [])

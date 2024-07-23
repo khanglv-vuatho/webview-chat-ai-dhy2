@@ -1,10 +1,10 @@
 import { PrimaryButton } from '@/components/Buttons'
-import RenderAILoading from '@/components/RenderAILoading'
 
 import { TClearData } from '@/types'
 import { capitalizeWords, postMessageCustom } from '@/utils'
 import { useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
+import RenderAILoading from '@/components/RenderAILoading'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -32,7 +32,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
         <p className='text-primary-green'>{clear_data?.accurate_percent}% đúng giá thị trường</p>
       </div>
       <>
-        {isAnimationClearData ? (
+        {!isAnimationClearData ? (
           <div className='relative flex h-[110px]'>
             <RenderAILoading className='absolute left-[-16px] top-[-100px] w-[calc(100%+32px)]' />
           </div>
