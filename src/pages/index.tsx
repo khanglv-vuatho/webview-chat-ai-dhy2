@@ -160,7 +160,7 @@ const Home = () => {
               return [...data]
             })
           }
-
+          setIsBotResponding(false)
           setIsAnimationClearData(false)
 
           break
@@ -210,7 +210,6 @@ const Home = () => {
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
-      setIsBotResponding(false)
       setIsAnimateMessage(false)
     }
   }
