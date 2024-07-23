@@ -134,6 +134,7 @@ const Home = () => {
 
       while (true) {
         const { value, done } = await reader.read()
+
         if (done) {
           const extractJSON = (input: string) => {
             const regex = /\[{(.*?)\}\]/s

@@ -43,7 +43,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     return () => {
       inputEl?.removeEventListener('blur', handleBlur)
     }
-  }, [sendRef, inputRef, message])
+  }, [sendRef, inputRef, message, clearData, isAnimationClearData])
 
   return (
     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.5 }} className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'>
