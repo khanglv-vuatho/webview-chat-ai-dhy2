@@ -29,7 +29,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
         <p className='text-primary-green'>{clear_data?.accurate_percent}% đúng giá thị trường</p>
       </div>
       <>
-        {!isAnimationClearData ? (
+        {isAnimationClearData ? (
           <div className='relative flex h-[84px]'>
             <RenderAILoading className='absolute left-[-16px] top-[-80px] w-[calc(100%+32px)]' />
           </div>
