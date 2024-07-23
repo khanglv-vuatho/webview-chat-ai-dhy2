@@ -1,10 +1,9 @@
 import { PrimaryButton } from '@/components/Buttons'
+import RenderAILoading from '@/components/RenderAILoading'
 
 import { TClearData } from '@/types'
 import { capitalizeWords, postMessageCustom } from '@/utils'
-import { lazy, memo, Suspense, useState } from 'react'
-
-const RenderAILoading = lazy(() => import('@/components/RenderAILoading'))
+import { useState } from 'react'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -31,12 +30,9 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
       </div>
       <>
         {!isAnimationClearData ? (
-          <Suspense fallback={null}>
-            <div className='flex'>
-              <RenderAILoading className='h-[84px] w-full' />
-              <RenderAILoading className='h-[84px] w-full -translate-x-4' />
-            </div>
-          </Suspense>
+          <div className='relative flex h-[84px]'>
+            <RenderAILoading className='absolute left-[-16px] top-[-80px] w-[calc(100%+32px)]' />
+          </div>
         ) : (
           <>
             <p className='text-sm'>{clear_data?.translated_summarizeProblem}</p>
