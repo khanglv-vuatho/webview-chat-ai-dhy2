@@ -50,7 +50,6 @@ const Home = () => {
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
     setMessage(e.target.value)
   }
 
