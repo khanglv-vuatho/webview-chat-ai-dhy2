@@ -29,12 +29,6 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
   if (msg === '') return null
   return (
     <div className={`flex items-end gap-1 ${isBot ? 'justify-start' : 'justify-end'}`}>
-      {isBot && (
-        <div className='h-12 w-16'>
-          <ImageFallback src='/robot.png' className={`size-full scale-85`} />
-        </div>
-      )}
-
       {isBot && msg === '...' ? (
         <motion.div className={`flex h-10 items-center gap-1 rounded-lg bg-blue-100 px-2`}>
           {Array(3)
