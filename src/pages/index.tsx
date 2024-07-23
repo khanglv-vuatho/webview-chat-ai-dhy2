@@ -6,7 +6,8 @@ import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData } from '@/types'
-import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { CircularProgress } from '@nextui-org/react'
+import { ChangeEvent, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
@@ -285,7 +286,19 @@ const Home = () => {
 
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
         {isLoadingAI ? (
-          <AILoading handleTimeEnd={handleTimeEnd} />
+          <Suspense
+            fallback={
+              <div className='flex h-dvh w-full items-center justify-center'>
+                <CircularProgress
+                  classNames={{
+                    svg: 'h-8 w-8 text-primary-blue'
+                  }}
+                />
+              </div>
+            }
+          >
+            <AILoading handleTimeEnd={handleTimeEnd} />
+          </Suspense>
         ) : conversation?.length > 0 ? (
           <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
         ) : (
