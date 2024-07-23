@@ -1,4 +1,5 @@
 import ToastComponent from '@/components/ToastComponent'
+import { TClearData } from '@/types'
 import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 
@@ -87,31 +88,69 @@ const postMessageCustom = ({ message, data = {} }: { message: string; data?: any
     ToastComponent({ message: message || 'has bug here', type: 'error' })
   }
 }
-
-interface keys {
-  serviceId: string
-  isFromUserBookingForm: string
+type TFormatDataPostMessage = {
+  dataInput: TClearData | null
+  serviceIdApi?: number
 }
-const formatDataPostMessage = ({ dataInput, keys }: { dataInput: any; keys?: keys }) => {
+
+const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessage) => {
+  const queryParams = new URLSearchParams(location.search)
+  const serviceId = queryParams.get('serviceId')
+  const isFromUserBookingForm = queryParams.get('isFromUserBookingForm')
+
   if (!dataInput) return
-  let message
-  let data = {}
+
+  let result = {
+    message: '',
+    data: {}
+  }
 
   // { serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice }
-  if (!keys) {
-    message = 'aiResponse'
-    data = {
-      ...dataInput
+  // {data
+  // :
+  // {serviceId: 12, translatedWorkerName: 'Thợ cắt tóc', translatedSummarizeProblem: 'Bạn cần thợ cắt tóc nam.', currencySymbol: 'VND', rangePrice: Array(2)}
+  // message
+  // :
+  // "aiResponse"}
+
+  const dataClean = {
+    translatedWorkerName: dataInput?.translated_workerName,
+    translatedSummarizeProblem: dataInput?.translated_summarizeProblem,
+    currencySymbol: dataInput?.currency_symbol,
+    rangePrice: dataInput?.range
+  }
+
+  if (!serviceId && !isFromUserBookingForm) {
+    if (!serviceIdApi) return
+    result = {
+      message: 'aiResponse',
+      data: {
+        serviceId: serviceIdApi,
+        ...dataClean
+      }
     }
-  } else {
+  } else if (!!isFromUserBookingForm) {
+    //{translatedSummarizeProblem, currencySymbol, rangePrice}
+    const cloneDataClean: any = { ...dataClean }
+    delete cloneDataClean.translatedWorkerName
+    result = {
+      message: 'aiResponseForBookingForm',
+      data: {
+        ...cloneDataClean
+      }
+    }
+  } else if (serviceId != null && isFromUserBookingForm == null) {
+    //{serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
+    result = {
+      message: 'aiResponseForSpecificService',
+      data: {
+        serviceId,
+        ...dataClean
+      }
+    }
   }
 
-  console.log({ dataInput })
-
-  return {
-    message: message,
-    data: data
-  }
+  return result
 }
 
 export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage }

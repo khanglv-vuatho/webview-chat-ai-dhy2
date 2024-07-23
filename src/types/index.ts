@@ -37,6 +37,14 @@ export type TClearData = {
   location_name_from_latlng: string
   translated_summarizeProblem: string
 }
+
+export type TServiceToProblem = {
+  icon: string
+  id: number
+  isNew: boolean
+  name: string
+}
+
 export type TAllMessage = {
   id?: number
   clear_data: null | TClearData

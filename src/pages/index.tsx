@@ -6,7 +6,7 @@ import FooterInput from '@/modules/FooterInput'
 import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
-import { Message, TAllMessage, TClearData } from '@/types'
+import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 import { formatDataPostMessage } from '@/utils'
 import { CircularProgress } from '@nextui-org/react'
 import { ChangeEvent, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
@@ -35,7 +35,10 @@ const Home = () => {
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
-  const [isAnimationClearData, setIsAnimationClearData] = useState(false)
+  // const [isAnimationClearData, setIsAnimationClearData] = useState(false)
+  const [onProblemToService, setOnProblemToService] = useState(false)
+
+  const [problemToService, setProblemToService] = useState<TServiceToProblem | null>(null)
 
   const [onDeteleting, setOnDeteleting] = useState(false)
 
@@ -158,13 +161,14 @@ const Home = () => {
                 }
                 return item
               })
-              setIsAnimationClearData(false)
+              // setIsAnimationClearData(false)
               return [...data]
             })
           }
 
           setIsBotResponding(false)
-          setIsAnimationClearData(false)
+          // setIsAnimationClearData(false)
+          setOnProblemToService(true)
 
           break
         }
@@ -183,7 +187,7 @@ const Home = () => {
                   //khi text cắt ra mà không có content
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                   if (index !== -1) {
-                    setIsAnimationClearData(true)
+                    // setIsAnimationClearData(true)
                   }
                   const result = index !== -1 ? text : accumulatedContent
 
@@ -225,11 +229,12 @@ const Home = () => {
 
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
-        setIsAnimationClearData(true)
+        // setIsAnimationClearData(true)
+        setOnProblemToService(true)
 
-        setTimeout(() => {
-          setIsAnimationClearData(false)
-        }, 4000)
+        // setTimeout(() => {
+        //   setIsAnimationClearData(false)
+        // }, 4000)
 
         setConversation(() => {
           const botMessage: Message = {
@@ -243,7 +248,7 @@ const Home = () => {
         })
       } else {
         setConversation(data.data)
-        setIsAnimationClearData(false)
+        // setIsAnimationClearData(false)
       }
     } catch (error) {
       console.log(error)
@@ -266,7 +271,22 @@ const Home = () => {
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
-      setIsAnimationClearData(false)
+      // setIsAnimationClearData(false)
+    }
+  }
+
+  const handleSendingProblemToService = async () => {
+    if (!clearData) return
+    try {
+      const payload = {
+        problem: clearData?.englishOriginal
+      }
+      const { data } = await instance.post('/webview/problem-to-service', payload)
+      setProblemToService(data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setOnProblemToService(false)
     }
   }
 
@@ -295,8 +315,12 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
-    formatDataPostMessage({ dataInput: clearData })
-  }, [])
+    onProblemToService && handleSendingProblemToService()
+  }, [onProblemToService])
+
+  useEffect(() => {
+    const data = formatDataPostMessage({ dataInput: clearData, serviceIdApi: problemToService?.id })
+  }, [clearData])
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
@@ -345,7 +369,7 @@ const Home = () => {
         handleSendMessage={handleSendMessage}
         isDisabled={isBotResponding || !message.length}
         clearData={clearData}
-        isAnimationClearData={isAnimationClearData}
+        isAnimationClearData={onProblemToService}
       />
     </div>
   )
