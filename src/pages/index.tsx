@@ -162,10 +162,7 @@ const Home = () => {
             })
           }
 
-          setTimeout(() => {
-            setIsBotResponding(false)
-          }, 200)
-
+          setIsBotResponding(false)
           setIsAnimationClearData(false)
 
           break
@@ -208,9 +205,7 @@ const Home = () => {
             } catch (error) {
               console.error('JSON parse error:', error)
             } finally {
-              setTimeout(() => {
-                setIsBotResponding(false)
-              }, 200)
+              setIsBotResponding(false)
               setIsAnimationClearData(false)
             }
           }
