@@ -11,7 +11,8 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
+    // bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
+    bottomRef?.current?.scrollIntoView()
   }, [bottomRef, conversation])
 
   return (
