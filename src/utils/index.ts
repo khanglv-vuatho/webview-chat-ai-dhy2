@@ -88,4 +88,30 @@ const postMessageCustom = ({ message, data = {} }: { message: string; data?: any
   }
 }
 
-export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom }
+interface keys {
+  serviceId: string
+  isFromUserBookingForm: string
+}
+const formatDataPostMessage = ({ dataInput, keys }: { dataInput: any; keys?: keys }) => {
+  if (!dataInput) return
+  let message
+  let data = {}
+
+  // { serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice }
+  if (!keys) {
+    message = 'aiResponse'
+    data = {
+      ...dataInput
+    }
+  } else {
+  }
+
+  console.log({ dataInput })
+
+  return {
+    message: message,
+    data: data
+  }
+}
+
+export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage }

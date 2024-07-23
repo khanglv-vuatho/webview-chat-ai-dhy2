@@ -7,6 +7,7 @@ import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData } from '@/types'
+import { formatDataPostMessage } from '@/utils'
 import { CircularProgress } from '@nextui-org/react'
 import { ChangeEvent, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -293,6 +294,10 @@ const Home = () => {
     } else {
       setOnFetchingInitChat(true)
     }
+  }, [])
+
+  useEffect(() => {
+    formatDataPostMessage({ dataInput: clearData })
   }, [])
 
   return (
