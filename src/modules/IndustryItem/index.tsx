@@ -12,13 +12,14 @@ type IndustryItemProps = {
 }
 const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData }) => {
   const [isLoading, setIsLoading] = useState(false)
+
   const handleFindWoker = () => {
     postMessageCustom({ message: 'findWorker', data: clear_data })
     setIsLoading(true)
   }
 
   return (
-    <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[16px_16px_32px_0px_#C1C1C129]'>
+    <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
       <p className='font-bold'>{capitalizeWords(clear_data?.translated_workerName || '')}</p>
       <div className='flex flex-col'>
         <p className='text-sm'>Giá kham khảo</p>
@@ -29,9 +30,12 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
         <p className='text-primary-green'>{clear_data?.accurate_percent}% đúng giá thị trường</p>
       </div>
       <>
-        {isAnimationClearData ? (
+        {!isAnimationClearData ? (
           <Suspense fallback={null}>
-            <RenderAILoading />
+            <div className='flex'>
+              <RenderAILoading className='h-[84px] w-full' />
+              <RenderAILoading className='h-[84px] w-full -translate-x-4' />
+            </div>
           </Suspense>
         ) : (
           <>

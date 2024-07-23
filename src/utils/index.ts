@@ -73,7 +73,7 @@ const formatDDMMYYYY = (time: string) => {
   return moment(time).format('DD/MM/YYYY')
 }
 
-const postMessageCustom = ({ message, data }: { message: string; data?: any }) => {
+const postMessageCustom = ({ message, data = {} }: { message: string; data?: any }) => {
   //@ts-ignore
   if (window?.vuatho) {
     //@ts-ignore

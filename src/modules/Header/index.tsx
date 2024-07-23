@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 1.5 }}
-        className='sticky left-0 right-0 top-0 flex items-center justify-between bg-white p-4'
+        className='sticky left-0 right-0 top-0 z-50 flex items-center justify-between bg-white p-4'
         style={{ zIndex: 10 }}
       >
         <ButtonOnlyIcon

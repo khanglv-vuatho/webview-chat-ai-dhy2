@@ -3,11 +3,12 @@ import { memo, useEffect, useRef } from 'react'
 
 import animationJson from '@/lotties/ai-generating.json'
 
-const RenderAILoading = () => {
-  return <AnimateAIGenerating />
+type Props = { className?: string }
+const RenderAILoading = ({ className }: Props) => {
+  return <AnimateAIGenerating className={className} />
 }
 
-const AnimateAIGenerating = () => {
+const AnimateAIGenerating = ({ className }: Props) => {
   const container = useRef(null)
   useEffect(() => {
     const instance = lottie.loadAnimation({
@@ -15,7 +16,10 @@ const AnimateAIGenerating = () => {
       renderer: 'svg',
       loop: true,
       autoplay: true,
-      animationData: animationJson
+      animationData: animationJson,
+      rendererSettings: {
+        className: 'w-full'
+      }
     })
 
     instance.setSpeed(5)
@@ -23,7 +27,7 @@ const AnimateAIGenerating = () => {
     return () => instance.destroy()
   }, [])
 
-  return <div ref={container} />
+  return <div ref={container} className={className} />
 }
 
 export default memo(RenderAILoading)

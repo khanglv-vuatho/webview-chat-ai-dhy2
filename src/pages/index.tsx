@@ -6,10 +6,8 @@ import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData } from '@/types'
-import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-
-const RenderAILoading = lazy(() => import('@/components/RenderAILoading'))
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
@@ -229,8 +227,6 @@ const Home = () => {
       console.log(error)
     }
   }
-
-  console.log({ isAnimationClearData })
 
   //handle call api delete history
   const handleDeleteChatHistory = async () => {
