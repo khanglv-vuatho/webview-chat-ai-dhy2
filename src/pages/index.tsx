@@ -50,6 +50,8 @@ const Home = () => {
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    //maxLenght 500 characters
+    if (e.target.value.length > 500) return
     setMessage(e.target.value)
   }
 
