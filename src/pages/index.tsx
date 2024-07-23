@@ -252,6 +252,8 @@ const Home = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setOnFetchingInitChat(false)
     }
   }
 
@@ -320,6 +322,7 @@ const Home = () => {
 
   useEffect(() => {
     const data = formatDataPostMessage({ dataInput: clearData, serviceIdApi: problemToService?.id })
+    console.log({ data })
   }, [clearData])
 
   return (
