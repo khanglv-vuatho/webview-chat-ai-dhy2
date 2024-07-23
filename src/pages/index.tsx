@@ -95,6 +95,7 @@ const Home = () => {
       if (!isFristSendMessageAndHasProblem) {
         setMessage('')
       }
+
       setIsBotResponding(true)
       setIsFirstSendMessage(false)
       const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {

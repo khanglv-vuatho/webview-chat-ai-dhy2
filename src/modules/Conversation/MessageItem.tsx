@@ -30,7 +30,7 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
   return (
     <div className={`flex items-end gap-1 ${isBot ? 'justify-start' : 'justify-end'}`}>
       {isBot && msg === '...' ? (
-        <motion.div className={`flex h-10 items-center gap-1 rounded-lg bg-blue-100 px-2`}>
+        <motion.div className={`flex h-10 items-center gap-1 rounded-lg bg-primary-light-gray px-2`}>
           {Array(3)
             .fill(0)
             .map((_, index) => (
