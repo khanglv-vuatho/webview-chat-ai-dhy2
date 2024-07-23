@@ -59,26 +59,35 @@ const Home = () => {
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
-    setConversation((prevConversation) => {
-      const newConversation: Message = {
-        by_me: true,
-        content: message.trim(),
-        isDisable: true,
-        type: 'text'
-      }
-      const botConversation: Message = {
-        by_me: false,
-        content: '...',
-        type: 'text',
-        isDisable: true
-      }
-      return [...prevConversation, newConversation, botConversation]
-    })
+    const newConversation: Message = {
+      by_me: true,
+      content: message.trim(),
+      isDisable: true,
+      type: 'text'
+    }
+
+    const botConversation: Message = {
+      by_me: false,
+      content: '...',
+      type: 'text',
+      isDisable: true
+    }
+
+    // Thêm newConversation trước
+    setConversation((prevConversation) => [...prevConversation, newConversation])
+
+    // Sau 0.2 giây thêm botConversation
+    const timer = setTimeout(() => {
+      setConversation((prevConversation) => [...prevConversation, botConversation])
+    }, 200)
 
     if (inputRef.current) {
       inputRef.current.selectionStart = inputRef.current.selectionEnd = message.trim().length
       inputRef?.current?.focus()
     }
+
+    //clear timeout
+    return () => clearTimeout(timer)
   }
 
   const handleReset = useCallback(() => {
