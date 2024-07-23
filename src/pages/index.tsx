@@ -66,8 +66,13 @@ const Home = () => {
         isDisable: true,
         type: 'text'
       }
-
-      return [...prevConversation, newConversation]
+      const botConversation: Message = {
+        by_me: false,
+        content: '...',
+        type: 'text',
+        isDisable: true
+      }
+      return [...prevConversation, newConversation, botConversation]
     })
 
     if (inputRef.current) {
@@ -98,6 +103,7 @@ const Home = () => {
 
       setIsBotResponding(true)
       setIsFirstSendMessage(false)
+
       const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
         method: 'POST',
         headers: {
