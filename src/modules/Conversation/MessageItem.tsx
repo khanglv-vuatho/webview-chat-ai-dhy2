@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import Markdown from 'markdown-to-jsx'
 import ImageFallback from '@/components/ImageFallback'
 import React, { memo } from 'react'
+import ToastComponent from '@/components/ToastComponent'
 
 type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean }
 const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage }) => {
@@ -26,7 +27,13 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
       }
     : {}
 
-  if (msg === '') return null
+  if (msg === '') {
+    ToastComponent({
+      message: 'msg=== null',
+      type: 'error'
+    })
+    return null
+  }
   return (
     <div className={`flex items-end gap-1 ${isBot ? 'justify-start' : 'justify-end'}`}>
       {isBot && msg === '...' ? (
@@ -66,7 +73,8 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                     style: {
                       listStyleType: 'disc',
                       marginTop: '4px',
-                      paddingLeft: '20px'
+                      paddingLeft: '20px',
+                      display: 'block'
                     }
                   }
                 },
@@ -77,7 +85,8 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                       listStyleType: 'decimal',
                       paddingLeft: '4px',
                       marginTop: '10px',
-                      listStylePosition: 'inside'
+                      listStylePosition: 'inside',
+                      display: 'block'
                     }
                   }
                 },
@@ -85,7 +94,8 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                   component: 'li',
                   props: {
                     style: {
-                      marginBottom: '10px'
+                      marginBottom: '10px',
+                      display: 'block'
                     }
                   }
                 }
