@@ -34,7 +34,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
     const handleBlur = (e: any) => {
       if (!sendRef?.current.contains(e.relatedTarget)) {
-        console.log('chay vao day')
         inputRef?.current?.blur()
       } else {
         inputEl.focus() // Focus lại vào input nếu không phải click vào sendRef
@@ -63,14 +62,14 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               maxRows={3}
               autoFocus
               ref={inputRef}
-              type='text'
               maxLength={500}
               value={message}
               onChange={handleChangeValue}
               radius='none'
               placeholder='Nhập tin nhắn'
+              autoComplete='off'
               autoCorrect='off'
-              autoComplete='false'
+              autoCapitalize='off'
               spellCheck='false'
               endContent={
                 <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
