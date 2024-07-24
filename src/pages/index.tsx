@@ -115,7 +115,7 @@ const Home = () => {
       }
 
       if (!isFristSendMessageAndHasProblem) {
-        setMessage('')
+        setMessage(' ')
         setMessageApi('')
       }
 
@@ -261,7 +261,7 @@ const Home = () => {
       //handle reset state chat
       setConversation([])
       if (!isFristSendMessageAndHasProblem) {
-        setMessage('')
+        setMessage(' ')
         setMessageApi('')
       }
       setClearData(null)
@@ -363,7 +363,7 @@ const Home = () => {
       <FooterInput
         conversation={conversation}
         isBotResponding={isBotResponding}
-        message={message}
+        message={message.trim()}
         handleChangeValue={handleChangeValue}
         handleSendMessage={handleSendMessage}
         isDisabled={isBotResponding || !message.length}

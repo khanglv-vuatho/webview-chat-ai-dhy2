@@ -65,8 +65,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               onChange={handleChangeValue}
               radius='none'
               placeholder='Nhập tin nhắn'
-              autoCorrect='off'
-              autoComplete='off'
+              autoCorrect='false'
+              autoComplete='false'
               spellCheck='false'
               endContent={
                 <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
