@@ -1,7 +1,7 @@
 import lottie from 'lottie-web'
 import { memo, useEffect, useRef } from 'react'
 
-import animationJson from '@/lotties/ai-generating.json'
+import animationJson from '@/lotties/loading3dots.json'
 
 type Props = { className?: string }
 const RenderAILoading = ({ className }: Props) => {
@@ -22,7 +22,7 @@ const AnimateAIGenerating = ({ className }: Props) => {
       }
     })
 
-    instance.setSpeed(6)
+    instance.setSpeed(1.2)
 
     return () => instance.destroy()
   }, [])
