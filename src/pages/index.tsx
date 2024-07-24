@@ -89,10 +89,6 @@ const Home = () => {
       setConversation((prevConversation) => [...prevConversation, botConversation])
     }, 200)
 
-    if (inputRef.current) {
-      inputRef?.current?.focus()
-    }
-
     //clear timeout
     return () => clearTimeout(timer)
   }
@@ -114,6 +110,9 @@ const Home = () => {
       }
 
       if (!isFristSendMessageAndHasProblem) {
+        if (inputRef.current) {
+          inputRef?.current?.focus()
+        }
         setMessage('')
         setMessageApi('')
       }
