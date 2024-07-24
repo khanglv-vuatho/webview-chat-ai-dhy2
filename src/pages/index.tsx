@@ -363,7 +363,7 @@ const Home = () => {
       <FooterInput
         conversation={conversation}
         isBotResponding={isBotResponding}
-        message={message.trim()}
+        message={message}
         handleChangeValue={handleChangeValue}
         handleSendMessage={handleSendMessage}
         isDisabled={isBotResponding || !message.length}
