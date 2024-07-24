@@ -30,12 +30,12 @@ const Home = () => {
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
   const [message, setMessage] = useState(isHasProblem ? problem : '')
+  const [messageApi, setMessageApi] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
 
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
-  // const [isAnimationClearData, setIsAnimationClearData] = useState(false)
   const [onProblemToService, setOnProblemToService] = useState(false)
 
   const [problemToService, setProblemToService] = useState<TServiceToProblem | null>(null)
@@ -58,6 +58,7 @@ const Home = () => {
     //maxLenght 500 characters
     if (e.target.value.length > 500) return
     setMessage(e.target.value)
+    setMessageApi(e.target.value)
   }
 
   const handleSendMessage = (e?: React.MouseEvent<HTMLButtonElement>) => {
@@ -68,7 +69,7 @@ const Home = () => {
 
     const newConversation: Message = {
       by_me: true,
-      content: message.trim(),
+      content: messageApi.trim(),
       isDisable: true,
       type: 'text'
     }
@@ -89,7 +90,7 @@ const Home = () => {
     }, 200)
 
     if (inputRef.current) {
-      inputRef.current.selectionStart = inputRef.current.selectionEnd = message.trim().length
+      inputRef.current.selectionStart = inputRef.current.selectionEnd = messageApi.trim().length
       inputRef?.current?.focus()
     }
 
@@ -108,13 +109,15 @@ const Home = () => {
   const handleSendMessageApi = async () => {
     try {
       const payload = {
-        content: isFristSendMessageAndHasProblem ? '' : message.trim(),
+        content: isFristSendMessageAndHasProblem ? '' : messageApi.trim(),
         id: dataInitMessage?.id,
         service_id: serviceId
       }
 
       if (!isFristSendMessageAndHasProblem) {
         setMessage('')
+        setMessageApi('')
+        //khang
       }
 
       setIsBotResponding(true)
@@ -161,13 +164,11 @@ const Home = () => {
                 }
                 return item
               })
-              // setIsAnimationClearData(false)
               return [...data]
             })
           }
 
           setIsBotResponding(false)
-          // setIsAnimationClearData(false)
           setOnProblemToService(true)
 
           break
@@ -248,7 +249,6 @@ const Home = () => {
         })
       } else {
         setConversation(data.data)
-        // setIsAnimationClearData(false)
       }
     } catch (error) {
       console.log(error)
@@ -268,6 +268,8 @@ const Home = () => {
       setConversation([])
       if (!isFristSendMessageAndHasProblem) {
         setMessage('')
+        setMessageApi('')
+        //khang
       }
       setClearData(null)
       setOnDeteleting(false)
@@ -323,7 +325,7 @@ const Home = () => {
   useEffect(() => {
     const data = formatDataPostMessage({ dataInput: clearData, serviceIdApi: problemToService?.id })
     console.log({ data })
-  }, [clearData])
+  }, [clearData, problemToService])
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>

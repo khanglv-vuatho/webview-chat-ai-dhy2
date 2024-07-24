@@ -97,21 +97,14 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   const queryParams = new URLSearchParams(location.search)
   const serviceId = queryParams.get('serviceId')
   const isFromUserBookingForm = queryParams.get('isFromUserBookingForm')
+  const serviceName = queryParams.get('serviceName')
+  const problem = queryParams.get('problem')
 
   if (!dataInput) return
-
   let result = {
     message: '',
     data: {}
   }
-
-  // { serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice }
-  // {data
-  // :
-  // {serviceId: 12, translatedWorkerName: 'Thợ cắt tóc', translatedSummarizeProblem: 'Bạn cần thợ cắt tóc nam.', currencySymbol: 'VND', rangePrice: Array(2)}
-  // message
-  // :
-  // "aiResponse"}
 
   const dataClean = {
     translatedWorkerName: dataInput?.translated_workerName,
@@ -129,18 +122,18 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
         ...dataClean
       }
     }
-  } else if (!!isFromUserBookingForm) {
-    //{translatedSummarizeProblem, currencySymbol, rangePrice}
-    const cloneDataClean: any = { ...dataClean }
-    delete cloneDataClean.translatedWorkerName
+  } else if (!!isFromUserBookingForm && serviceId != null && serviceName != null && problem != null) {
+    // {translatedSummarizeProblem, currencySymbol, rangePrice}
+    //delete translatedWorkerName in data
+    const { translatedWorkerName, ...others } = dataClean
     result = {
       message: 'aiResponseForBookingForm',
       data: {
-        ...cloneDataClean
+        ...others
       }
     }
   } else if (serviceId != null && isFromUserBookingForm == null) {
-    //{serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
+    // {serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
     result = {
       message: 'aiResponseForSpecificService',
       data: {
