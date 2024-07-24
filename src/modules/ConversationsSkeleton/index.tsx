@@ -3,7 +3,7 @@ import { memo } from 'react'
 const ConverstaionsSkeleton = () => {
   return (
     <div className='flex flex-col gap-2 px-4'>
-      {Array.from({ length: 7 }).map((_, index) => (
+      {Array.from({ length: 5 }).map((_, index) => (
         <SkeletonConversation key={index} index={index} />
       ))}
     </div>
