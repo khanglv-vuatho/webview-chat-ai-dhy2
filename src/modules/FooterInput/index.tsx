@@ -4,6 +4,7 @@ import { Button, Input, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
+import ToastComponent from '@/components/ToastComponent'
 
 type FooterInputType = {
   conversation: Message[]
@@ -33,8 +34,11 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
     const handleBlur = (e: any) => {
       if (!sendRef?.current.contains(e.relatedTarget)) {
+        console.log('chay vao day')
+        ToastComponent({ message: 'chay vao day', type: 'success' })
         inputRef?.current?.blur()
       } else {
+        ToastComponent({ message: '123', type: 'success' })
         inputEl.focus() // Focus lại vào input nếu không phải click vào sendRef
       }
     }

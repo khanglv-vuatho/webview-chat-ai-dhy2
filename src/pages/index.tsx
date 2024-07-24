@@ -67,6 +67,8 @@ const Home = () => {
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
+    inputRef?.current?.focus()
+
     const newConversation: Message = {
       by_me: true,
       content: messageApi.trim(),
@@ -110,9 +112,6 @@ const Home = () => {
       }
 
       if (!isFristSendMessageAndHasProblem) {
-        if (inputRef.current) {
-          inputRef?.current?.focus()
-        }
         setMessage('')
         setMessageApi('')
       }
