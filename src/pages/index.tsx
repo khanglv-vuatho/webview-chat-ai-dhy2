@@ -60,6 +60,7 @@ const Home = () => {
     if (e.target.value.length > 500) return
     setMessage(e.target.value)
     setMessageApi(e.target.value)
+    console.log('message', e.target.value)
   }
 
   const handleSendMessage = () => {

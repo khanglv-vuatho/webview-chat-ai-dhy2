@@ -77,6 +77,13 @@ const formatDDMMYYYY = (time: string) => {
 }
 
 const postMessageCustom = ({ message, data = {} }: TPostMessage) => {
+  ToastComponent({
+    message: JSON.stringify({
+      message,
+      data
+    }),
+    type: 'info'
+  })
   //@ts-ignore
   if (window?.vuatho) {
     //@ts-ignore
@@ -100,6 +107,9 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   const queryParams = new URLSearchParams(location.search)
   const serviceId = queryParams.get('serviceId')
   const isFromUserBookingForm = queryParams.get('isFromUserBookingForm')
+  const serviceName = queryParams.get('serviceName')
+  const problem = queryParams.get('problem')
+
   let result = {
     message: '',
     data: {}
@@ -122,14 +132,18 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
         ...dataClean
       }
     }
-    const { translatedWorkerName, ...others } = dataClean
+  } else if (!!isFromUserBookingForm && serviceId != null && serviceName != null && problem != null) {
+    //{translatedSummarizeProblem, currencySymbol, rangePrice}
+    const cloneDataClean: any = { ...dataClean }
+    delete cloneDataClean.translatedWorkerName
     result = {
       message: keyPossmessage.AI_RESPONSE_FOR_BOOKING_FORM,
       data: {
-        ...others
+        ...cloneDataClean
       }
     }
   } else if (serviceId != null && isFromUserBookingForm == null) {
+    //{serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
     result = {
       message: keyPossmessage.AI_RESPONSE_FOR_SPECIFIC_SERVICE,
       data: {

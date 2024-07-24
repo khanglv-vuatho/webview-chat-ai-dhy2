@@ -4,8 +4,6 @@ import { Button, Input, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
-import ToastComponent from '@/components/ToastComponent'
-
 type FooterInputType = {
   conversation: Message[]
   isBotResponding: boolean
@@ -24,6 +22,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   const dataIsClear = clearData?.isClear
 
+  console.log({ message })
   const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     handleSendMessage()
