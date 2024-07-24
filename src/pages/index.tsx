@@ -2,8 +2,6 @@ import ImageFallback from '@/components/ImageFallback'
 import AILoading from '@/modules/AILoading'
 import Conversation from '@/modules/Conversation'
 import ConverstaionsSkeleton from '@/modules/ConversationsSkeleton'
-// import FooterInput from '@/modules/FooterInput'
-// import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
@@ -61,13 +59,13 @@ const Home = () => {
     if (e.target.value.length > 500) return
     setMessage(e.target.value)
     setMessageApi(e.target.value)
-    console.log('message', e.target.value)
   }
 
   const handleSendMessage = () => {
     if (message.length === 0) return
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
+    setMessage('')
 
     inputRef?.current?.focus()
 
