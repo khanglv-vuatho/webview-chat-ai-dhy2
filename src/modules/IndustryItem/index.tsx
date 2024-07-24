@@ -2,10 +2,9 @@ import { PrimaryButton } from '@/components/Buttons'
 
 import { TClearData, TServiceToProblem } from '@/types'
 import { capitalizeWords, formatDataPostMessage, postMessageCustom } from '@/utils'
-import { lazy, Suspense, useState } from 'react'
+import { useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
-
-const RenderAILoading = lazy(() => import('@/components/RenderAILoading'))
+import RenderAILoading from '@/components/RenderAILoading'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -38,9 +37,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
       <>
         {isAnimationClearData ? (
           <div className='flex h-[110px]'>
-            <Suspense fallback={null}>
-              <RenderAILoading className='left-[-16px] top-[-100px] h-[100px] w-[calc(100%+32px)]' />
-            </Suspense>
+            <RenderAILoading className='left-[-16px] top-[-100px] h-[100px] w-[calc(100%+32px)]' />
           </div>
         ) : (
           <>
