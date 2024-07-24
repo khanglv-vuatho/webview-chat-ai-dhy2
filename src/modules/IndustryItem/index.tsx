@@ -1,7 +1,7 @@
 import { PrimaryButton } from '@/components/Buttons'
 
-import { TClearData } from '@/types'
-import { capitalizeWords, postMessageCustom } from '@/utils'
+import { TClearData, TServiceToProblem } from '@/types'
+import { capitalizeWords, formatDataPostMessage, postMessageCustom } from '@/utils'
 import { useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
 import RenderAILoading from '@/components/RenderAILoading'
@@ -9,12 +9,15 @@ import RenderAILoading from '@/components/RenderAILoading'
 type IndustryItemProps = {
   clear_data: TClearData | null
   isAnimationClearData: boolean
+  problemToService: TServiceToProblem | null
 }
-const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData }) => {
+const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData, problemToService }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleFindWoker = () => {
-    postMessageCustom({ message: 'findWorker', data: clear_data })
+    const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+    postMessageCustom(postMessage as any)
+
     setIsLoading(true)
   }
 

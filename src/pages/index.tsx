@@ -312,11 +312,6 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService])
 
-  useEffect(() => {
-    const data = formatDataPostMessage({ dataInput: clearData, serviceIdApi: problemToService?.id })
-    console.log({ data })
-  }, [clearData, problemToService])
-
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
       <Header
@@ -367,6 +362,7 @@ const Home = () => {
         isDisabled={isBotResponding || !message.length}
         clearData={clearData}
         isAnimationClearData={onProblemToService}
+        problemToService={problemToService}
       />
     </div>
   )
