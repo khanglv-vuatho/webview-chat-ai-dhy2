@@ -12,7 +12,7 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
 
   useEffect(() => {
     // bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
-    bottomRef?.current?.scrollIntoView()
+    bottomRef?.current?.scrollIntoView({ behavior: 'instant' })
   }, [bottomRef, conversation])
 
   return (
