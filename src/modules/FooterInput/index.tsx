@@ -61,10 +61,10 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
             </Button> */}
             <Input
-              minRows={1}
-              maxRows={3}
+              // minRows={1}
+              // maxRows={3}
               autoFocus
-              ref={inputRef}
+              ref={inputRef as any}
               type='text'
               maxLength={500}
               value={message}
