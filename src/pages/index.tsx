@@ -186,6 +186,7 @@ const Home = () => {
                   const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                   if (index !== -1) {
                     // setIsAnimationClearData(true)
+                    setOnProblemToService(true)
                   }
                   const result = index !== -1 ? text : accumulatedContent
 
