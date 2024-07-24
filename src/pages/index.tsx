@@ -90,7 +90,6 @@ const Home = () => {
     }, 200)
 
     if (inputRef.current) {
-      inputRef.current.selectionStart = inputRef.current.selectionEnd = messageApi.trim().length
       inputRef?.current?.focus()
     }
 
@@ -117,7 +116,6 @@ const Home = () => {
       if (!isFristSendMessageAndHasProblem) {
         setMessage('')
         setMessageApi('')
-        //khang
       }
 
       setIsBotResponding(true)
@@ -230,12 +228,7 @@ const Home = () => {
 
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
-        // setIsAnimationClearData(true)
         setOnProblemToService(true)
-
-        // setTimeout(() => {
-        //   setIsAnimationClearData(false)
-        // }, 4000)
 
         setConversation(() => {
           const botMessage: Message = {
@@ -269,13 +262,11 @@ const Home = () => {
       if (!isFristSendMessageAndHasProblem) {
         setMessage('')
         setMessageApi('')
-        //khang
       }
       setClearData(null)
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
-      // setIsAnimationClearData(false)
     }
   }
 
@@ -353,6 +344,8 @@ const Home = () => {
           >
             <AILoading handleTimeEnd={handleTimeEnd} />
           </Suspense>
+        ) : onFetchingInitChat ? (
+          ''
         ) : conversation?.length > 0 ? (
           <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
         ) : (
