@@ -15,7 +15,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
       <ReduxProvider store={store}>
         <ToastContainer />
         <Wrapper>
-          <FastClick>{children}</FastClick>
+          {/* <FastClick> */}
+          {children}
+          {/* </FastClick> */}
         </Wrapper>
       </ReduxProvider>
     </NextUIProvider>
