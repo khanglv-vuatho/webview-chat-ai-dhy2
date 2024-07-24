@@ -353,6 +353,7 @@ const Home = () => {
           </div>
         )}
       </div>
+
       <FooterInput
         conversation={conversation}
         isBotResponding={isBotResponding}

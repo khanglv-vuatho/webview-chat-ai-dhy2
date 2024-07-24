@@ -34,6 +34,7 @@ function capitalizeWords(string: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
+
 const useDebounce = (value: string, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value)
   const handler: any = useRef(null)
@@ -75,6 +76,14 @@ const formatDDMMYYYY = (time: string) => {
 }
 
 const postMessageCustom = ({ message, data = {} }: { message: string; data?: any }) => {
+  ToastComponent({
+    message:
+      JSON.stringify({
+        message,
+        data
+      }) || 'has bug here',
+    type: 'error'
+  })
   //@ts-ignore
   if (window?.vuatho) {
     //@ts-ignore
