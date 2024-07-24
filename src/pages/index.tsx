@@ -267,6 +267,7 @@ const Home = () => {
       setOnDeteleting(false)
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
+      setOnProblemToService(false)
     }
   }
 
