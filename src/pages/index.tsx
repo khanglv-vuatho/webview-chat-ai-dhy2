@@ -115,7 +115,7 @@ const Home = () => {
       }
 
       if (!isFristSendMessageAndHasProblem) {
-        setMessage(' ')
+        setMessage('')
         setMessageApi('')
       }
 
@@ -261,7 +261,7 @@ const Home = () => {
       //handle reset state chat
       setConversation([])
       if (!isFristSendMessageAndHasProblem) {
-        setMessage(' ')
+        setMessage('')
         setMessageApi('')
       }
       setClearData(null)
