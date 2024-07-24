@@ -1,7 +1,7 @@
 import lottie from 'lottie-web'
 import { memo, useEffect, useRef } from 'react'
 
-import animationJson from '@/lotties/ai-generating.json'
+import animationJson from '@/lotties/fly.json'
 
 type Props = { className?: string }
 const RenderAILoading = ({ className }: Props) => {
