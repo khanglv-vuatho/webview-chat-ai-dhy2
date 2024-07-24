@@ -1,17 +1,18 @@
 import ImageFallback from '@/components/ImageFallback'
-import RenderAILoading from '@/components/RenderAILoading'
 import AILoading from '@/modules/AILoading'
 import Conversation from '@/modules/Conversation'
 import ConverstaionsSkeleton from '@/modules/ConversationsSkeleton'
-import FooterInput from '@/modules/FooterInput'
-import Header from '@/modules/Header'
+// import FooterInput from '@/modules/FooterInput'
+// import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
-import { formatDataPostMessage } from '@/utils'
 import { CircularProgress } from '@nextui-org/react'
-import { ChangeEvent, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+const Header = lazy(() => import('@/modules/Header'))
+const FooterInput = lazy(() => import('@/modules/FooterInput'))
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
@@ -316,14 +317,16 @@ const Home = () => {
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
-      <Header
-        isDisable={isBotResponding}
-        handleReset={handleReset}
-        conversation={conversation}
-        onDeteleting={onDeteleting}
-        setIsOpenModalConfirmDelete={setIsOpenModalConfirmDelete}
-        isOpenModalConfirmDelete={isOpenModalConfirmDelete}
-      />
+      <Suspense fallback={null}>
+        <Header
+          isDisable={isBotResponding}
+          handleReset={handleReset}
+          conversation={conversation}
+          onDeteleting={onDeteleting}
+          setIsOpenModalConfirmDelete={setIsOpenModalConfirmDelete}
+          isOpenModalConfirmDelete={isOpenModalConfirmDelete}
+        />
+      </Suspense>
 
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
         {isLoadingAI ? (
@@ -355,17 +358,19 @@ const Home = () => {
           </div>
         )}
       </div>
-      <FooterInput
-        conversation={conversation}
-        isBotResponding={isBotResponding}
-        message={message}
-        handleChangeValue={handleChangeValue}
-        handleSendMessage={handleSendMessage}
-        isDisabled={isBotResponding || !message.length}
-        clearData={clearData}
-        isAnimationClearData={onProblemToService}
-        problemToService={problemToService}
-      />
+      <Suspense fallback={null}>
+        <FooterInput
+          conversation={conversation}
+          isBotResponding={isBotResponding}
+          message={message}
+          handleChangeValue={handleChangeValue}
+          handleSendMessage={handleSendMessage}
+          isDisabled={isBotResponding || !message.length}
+          clearData={clearData}
+          isAnimationClearData={onProblemToService}
+          problemToService={problemToService}
+        />
+      </Suspense>
     </div>
   )
 }
