@@ -62,9 +62,8 @@ const Home = () => {
     setMessageApi(e.target.value)
   }
 
-  const handleSendMessage = (e?: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSendMessage = () => {
     if (message.length === 0) return
-    e?.preventDefault()
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
