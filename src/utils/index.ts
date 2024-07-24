@@ -88,6 +88,7 @@ const postMessageCustom = ({ message, data = {} }: { message: string; data?: any
     ToastComponent({ message: message || 'has bug here', type: 'error' })
   }
 }
+
 type TFormatDataPostMessage = {
   dataInput: TClearData | null
   serviceIdApi?: number
