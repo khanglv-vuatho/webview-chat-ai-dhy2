@@ -17,7 +17,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
 
   const handleFindWoker = () => {
     const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-    postMessageCustom(postMessage as any)
+    postMessageCustom(postMessage)
 
     setIsLoading(true)
   }

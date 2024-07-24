@@ -1,6 +1,6 @@
 import ToastComponent from '@/components/ToastComponent'
 import { keyPossmessage } from '@/constants'
-import { TClearData } from '@/types'
+import { TClearData, TPostMessage } from '@/types'
 import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 
@@ -76,7 +76,7 @@ const formatDDMMYYYY = (time: string) => {
   return moment(time).format('DD/MM/YYYY')
 }
 
-const postMessageCustom = ({ message, data = {} }: { message: string; data?: any }) => {
+const postMessageCustom = ({ message, data = {} }: TPostMessage) => {
   ToastComponent({
     message:
       JSON.stringify({
@@ -104,18 +104,15 @@ type TFormatDataPostMessage = {
   serviceIdApi?: number
 }
 
-const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessage) => {
+const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessage): TPostMessage => {
   const queryParams = new URLSearchParams(location.search)
   const serviceId = queryParams.get('serviceId')
   const isFromUserBookingForm = queryParams.get('isFromUserBookingForm')
-  const serviceName = queryParams.get('serviceName')
-  const problem = queryParams.get('problem')
-
-  if (!dataInput) return
   let result = {
     message: '',
     data: {}
   }
+  if (!dataInput) return result
 
   const dataClean = {
     translatedWorkerName: dataInput?.translated_workerName,
@@ -125,7 +122,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   }
 
   if (!serviceId && !isFromUserBookingForm) {
-    if (!serviceIdApi) return
+    if (!serviceIdApi) return result
     result = {
       message: keyPossmessage.AI_RESPONSE,
       data: {
@@ -133,9 +130,6 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
         ...dataClean
       }
     }
-
-    // {translatedSummarizeProblem, currencySymbol, rangePrice}
-    //delete translatedWorkerName in data
     const { translatedWorkerName, ...others } = dataClean
     result = {
       message: keyPossmessage.AI_RESPONSE_FOR_BOOKING_FORM,
@@ -144,7 +138,6 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
       }
     }
   } else if (serviceId != null && isFromUserBookingForm == null) {
-    // {serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
     result = {
       message: keyPossmessage.AI_RESPONSE_FOR_SPECIFIC_SERVICE,
       data: {

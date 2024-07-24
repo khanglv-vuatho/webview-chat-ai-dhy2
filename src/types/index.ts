@@ -51,3 +51,5 @@ export type TAllMessage = {
   created_at: string
   data: Message[]
 }
+
+export type TPostMessage = { message: string; data?: any }

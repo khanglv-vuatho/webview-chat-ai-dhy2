@@ -56,15 +56,11 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
         <div className='pt-2'>
           <p className='px-10 text-center text-xs font-light text-primary-gray'>Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.</p>
           <div className='flex items-end gap-2'>
-            {/* <input type='text' autoCorrect='off' value={message} onChange={handleChangeValue} />
-            <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
-              <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
-            </Button> */}
-            <Input
-              // minRows={1}
-              // maxRows={3}
+            <Textarea
+              minRows={1}
+              maxRows={3}
               autoFocus
-              ref={inputRef as any}
+              ref={inputRef}
               type='text'
               maxLength={500}
               value={message}
