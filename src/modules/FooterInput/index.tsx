@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
-import { Button, Textarea } from '@nextui-org/react'
+import { Button, Input, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
@@ -60,7 +60,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
             <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
               <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
             </Button> */}
-            <Textarea
+            <Input
               minRows={1}
               maxRows={3}
               autoFocus

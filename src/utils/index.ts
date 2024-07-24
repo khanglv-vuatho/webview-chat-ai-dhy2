@@ -133,7 +133,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
         ...dataClean
       }
     }
-  } else if (!!isFromUserBookingForm && serviceId != null && serviceName != null && problem != null) {
+
     // {translatedSummarizeProblem, currencySymbol, rangePrice}
     //delete translatedWorkerName in data
     const { translatedWorkerName, ...others } = dataClean
