@@ -148,7 +148,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
     result = {
       message: keyPossmessage.AI_RESPONSE_FOR_SPECIFIC_SERVICE,
       data: {
-        serviceId,
+        serviceId: Number(serviceId),
         ...dataClean
       }
     }
