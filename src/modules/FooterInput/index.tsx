@@ -65,9 +65,9 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               onChange={handleChangeValue}
               radius='none'
               placeholder='Nhập tin nhắn'
-              autoCorrect='off' // Disable auto-correction
-              autoComplete='off' // Disable auto-complete
-              spellCheck='false' // Disable spell check
+              autoCorrect='off'
+              autoComplete='off'
+              spellCheck='false'
               endContent={
                 <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
                   <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
