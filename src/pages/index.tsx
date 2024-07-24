@@ -2,6 +2,7 @@ import ImageFallback from '@/components/ImageFallback'
 import RenderAILoading from '@/components/RenderAILoading'
 import AILoading from '@/modules/AILoading'
 import Conversation from '@/modules/Conversation'
+import ConverstaionsSkeleton from '@/modules/ConversationsSkeleton'
 import FooterInput from '@/modules/FooterInput'
 import Header from '@/modules/Header'
 import TypewriterEffect from '@/modules/TypewriterEffect'
@@ -344,8 +345,8 @@ const Home = () => {
           >
             <AILoading handleTimeEnd={handleTimeEnd} />
           </Suspense>
-        ) : onFetchingInitChat ? (
-          ''
+        ) : !onFetchingInitChat ? (
+          <ConverstaionsSkeleton />
         ) : conversation?.length > 0 ? (
           <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
         ) : (
