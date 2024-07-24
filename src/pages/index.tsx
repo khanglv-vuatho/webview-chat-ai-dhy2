@@ -345,7 +345,7 @@ const Home = () => {
           >
             <AILoading handleTimeEnd={handleTimeEnd} />
           </Suspense>
-        ) : !onFetchingInitChat ? (
+        ) : onFetchingInitChat ? (
           <ConverstaionsSkeleton />
         ) : conversation?.length > 0 ? (
           <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
