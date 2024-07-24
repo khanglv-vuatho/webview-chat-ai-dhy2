@@ -16,7 +16,7 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
   }, [bottomRef, conversation])
 
   return (
-    <div className='flex h-full flex-col justify-end gap-2 px-4'>
+    <div className='flex flex-col gap-2 px-4'>
       {conversation?.map((item, index) => <MessageItem isAnimateMessage={isAnimateMessage} key={index} by_me={item?.by_me} msg={item.content} />)}
       <div ref={bottomRef} /> {/* Bottom reference for auto-scrolling */}
     </div>
