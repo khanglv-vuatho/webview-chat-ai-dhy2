@@ -1,7 +1,6 @@
 import ToastComponent from '@/components/ToastComponent'
 
 import axios, { AxiosResponse } from 'axios'
-import { useDispatch } from 'react-redux'
 
 export const apiConfig = {
   baseUrl: import.meta.env.VITE_API_URL

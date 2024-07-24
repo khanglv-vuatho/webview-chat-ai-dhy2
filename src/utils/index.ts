@@ -77,14 +77,6 @@ const formatDDMMYYYY = (time: string) => {
 }
 
 const postMessageCustom = ({ message, data = {} }: TPostMessage) => {
-  ToastComponent({
-    message:
-      JSON.stringify({
-        message,
-        data
-      }) || 'has bug here',
-    type: 'error'
-  })
   //@ts-ignore
   if (window?.vuatho) {
     //@ts-ignore
