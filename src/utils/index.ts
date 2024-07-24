@@ -1,4 +1,5 @@
 import ToastComponent from '@/components/ToastComponent'
+import { keyPossmessage } from '@/constants'
 import { TClearData } from '@/types'
 import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
@@ -126,7 +127,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   if (!serviceId && !isFromUserBookingForm) {
     if (!serviceIdApi) return
     result = {
-      message: 'aiResponse',
+      message: keyPossmessage.AI_RESPONSE,
       data: {
         serviceId: serviceIdApi,
         ...dataClean
@@ -137,7 +138,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
     //delete translatedWorkerName in data
     const { translatedWorkerName, ...others } = dataClean
     result = {
-      message: 'aiResponseForBookingForm',
+      message: keyPossmessage.AI_RESPONSE_FOR_BOOKING_FORM,
       data: {
         ...others
       }
@@ -145,7 +146,7 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   } else if (serviceId != null && isFromUserBookingForm == null) {
     // {serviceId, translatedWorkerName, translatedSummarizeProblem, currencySymbol, rangePrice}
     result = {
-      message: 'aiResponseForSpecificService',
+      message: keyPossmessage.AI_RESPONSE_FOR_SPECIFIC_SERVICE,
       data: {
         serviceId,
         ...dataClean

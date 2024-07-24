@@ -311,7 +311,7 @@ const Home = () => {
 
   useEffect(() => {
     onProblemToService && handleSendingProblemToService()
-  }, [onProblemToService])
+  }, [onProblemToService, clearData])
 
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>

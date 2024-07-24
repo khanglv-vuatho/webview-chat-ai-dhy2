@@ -46,10 +46,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         <ButtonOnlyIcon
           onPress={() =>
             postMessageCustom({
-              message: keyPossmessage.CAN_POP,
-              data: {
-                test: 'khang'
-              }
+              message: keyPossmessage.CAN_POP
             })
           }
           className='outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0'
