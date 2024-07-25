@@ -36,9 +36,6 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
       </div>
       <>
         {isAnimationClearData ? (
-          // <div className='relative flex h-[110px]'>
-          //   <RenderAILoading className='absolute left-[-16px] top-[-100px] w-[calc(100%+32px)]' />
-          // </div>
           <div className='flex h-[110px]'>
             <RenderAILoading className='left-[-16px] top-[-100px] h-[100px] w-[calc(100%+32px)]' />
           </div>

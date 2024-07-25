@@ -6,14 +6,16 @@ import { motion } from 'framer-motion'
 type ConversationType = {
   conversation: Message[]
   isAnimateMessage: boolean
+  setIsErrorWhenAIResponding: (value: boolean) => void
+  isFocus: boolean
 }
 
-const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage }) => {
+const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage, isFocus }) => {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef?.current?.scrollIntoView({ behavior: 'instant' })
-  }, [bottomRef, conversation])
+  }, [bottomRef, conversation, isFocus])
 
   const motionProps = !isAnimateMessage
     ? {

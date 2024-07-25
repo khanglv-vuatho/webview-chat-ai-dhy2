@@ -10,6 +10,7 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
+import { removeLastTwoElements } from '@/utils'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
@@ -44,12 +45,13 @@ const Home = () => {
   const [message, setMessage] = useState(isHasProblem ? problem : '')
   const [messageApi, setMessageApi] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
+  const [isFocus, setIsFocus] = useState(false)
 
   // conversation
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
-  const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
+  // const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
 
   // clear data
   const [clearData, setClearData] = useState<TClearData | null>(null)
@@ -133,6 +135,7 @@ const Home = () => {
 
     setIsBotResponding(true)
     setIsFirstSendMessage(false)
+
     const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
       method: 'POST',
       headers: {
@@ -155,6 +158,10 @@ const Home = () => {
       const { value, done } = await reader.read()
 
       if (done) {
+        // if (tempContent === '') {
+        //   setIsErrorWhenAIResponding(true)
+        // }
+
         const extractJSON = (input: string) => {
           const regex = /\[{(.*?)\}\]/s
           const match = input.match(regex)
@@ -163,6 +170,7 @@ const Home = () => {
 
         try {
           const content: any = JSON?.parse?.(extractJSON?.(tempContent) || '')
+
           if (content?.[0]?.isClear) {
             setClearData(content?.[0])
             setConversation((prev) => {
@@ -234,7 +242,7 @@ const Home = () => {
     try {
       await handleCallApiMessage()
     } catch (error) {
-      setIsErrorWhenAIResponding(true)
+      // setIsErrorWhenAIResponding(true)
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
@@ -310,12 +318,55 @@ const Home = () => {
   }
 
   const handleRetryMessage = async () => {
+    const lastMessageByMe = conversation.filter((item) => item.by_me).pop()
+
+    // Lấy tất cả các phần tử có `by_me` là `false`
+    const lastMessageByBot = conversation.filter((item) => !item.by_me).pop()
+
+    const lassMessageInConversation = conversation?.pop()
+
+    const newMessage: Message = {
+      by_me: true,
+      content: lastMessageByMe?.content.trim() || '',
+      isDisable: true,
+      type: 'text',
+      isSending: false
+    }
+
+    if (lassMessageInConversation?.by_me) {
+      //delete last message by me
+      console.log('123zxczcxcxzcxzcxz')
+      setConversation((prevConversation) => {
+        const updatedConversation = [...prevConversation]
+        updatedConversation.pop()
+
+        // them newMessage vao cuoi mang updatedConversation
+        updatedConversation.push(newMessage)
+
+        return updatedConversation
+      })
+    } else {
+      console.log('123zxc')
+      //delete two messages in conversation
+      setConversation((prevConversation) => {
+        const updatedConversation = removeLastTwoElements(prevConversation)
+        return [...updatedConversation]
+      })
+    }
+
     try {
-      const payload = {}
+      const payload: TPayload = {
+        content: lastMessageByMe?.content.trim() || '',
+        id: dataInitMessage?.id,
+        service_id: serviceId
+      }
+
+      await handleCallApiMessage(payload)
       console.log({ conversation })
-      // const data = await handleCallApiMessage()
     } catch (error) {
       console.log(error)
+    } finally {
+      // setIsErrorWhenAIResponding(false)
     }
   }
 
@@ -347,15 +398,16 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService, clearData])
 
-  useEffect(() => {
-    isErrorWhenAIResponding && handleRetryMessage()
-  }, [isErrorWhenAIResponding])
+  // useEffect(() => {
+  //   isErrorWhenAIResponding && handleRetryMessage()
+  // }, [isErrorWhenAIResponding])
 
   // useEffect(() => {
   //   if (!network.online) {
   //     setIsErrorWhenAIResponding(true)
   //   }
   // }, [network.online])
+
   return (
     <div className={`relative flex h-dvh flex-col`}>
       <Suspense fallback={<SkeletonHeader />}>
@@ -373,7 +425,7 @@ const Home = () => {
           {onFetchingInitChat ? (
             <ConverstaionsSkeleton />
           ) : conversation?.length > 0 ? (
-            <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
+            <Conversation isFocus={isFocus} setIsErrorWhenAIResponding={() => {}} isAnimateMessage={isAnimateMessage} conversation={conversation} />
           ) : (
             <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>
               <div className='mx-auto h-12 w-16'>
@@ -386,13 +438,14 @@ const Home = () => {
           )}
         </Suspense>
       </div>
+      {/* <div onClick={() => setIsErrorWhenAIResponding(true)}>resend</div> */}
       <Suspense fallback={<SkeletonFooterInput />}>
         <FooterInput
           conversation={conversation}
           message={message}
+          setIsFocus={setIsFocus}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
-          // isDisabled={isBotResponding || !message.length || !message.trim().length}
           isDisabled={isBotResponding || !message.length || !message.trim().length || onFetchingInitChat}
           clearData={clearData}
           isAnimationClearData={onProblemToService}

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
 import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
-import { ChangeEvent, memo, useEffect, useRef } from 'react'
+import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
 type FooterInputType = {
   conversation: Message[]
@@ -13,9 +13,10 @@ type FooterInputType = {
   clearData: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
+  setIsFocus: (value: boolean) => void
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService }) => {
+const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, setIsFocus }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -63,6 +64,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               minRows={1}
               maxRows={3}
               autoFocus
+              onFocus={() => setIsFocus(true)}
               ref={inputRef}
               maxLength={500}
               value={message}

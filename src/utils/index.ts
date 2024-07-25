@@ -1,6 +1,6 @@
 import ToastComponent from '@/components/ToastComponent'
 import { keyPossmessage } from '@/constants'
-import { TClearData, TPostMessage } from '@/types'
+import { Message, TClearData, TPostMessage } from '@/types'
 import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 
@@ -149,4 +149,19 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   return result
 }
 
-export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage }
+const removeLastTwoElements = (prevConversation: Message[]) => {
+  // Tạo một bản sao của mảng
+  const newConversation = [...prevConversation]
+
+  // Kiểm tra nếu mảng có ít nhất 2 phần tử và xoá chúng
+  if (newConversation.length >= 2) {
+    newConversation.splice(-2, 2)
+  } else if (newConversation.length === 1) {
+    newConversation.splice(-1, 1)
+  }
+
+  // Trả về mảng mới
+  return newConversation
+}
+
+export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage, removeLastTwoElements }

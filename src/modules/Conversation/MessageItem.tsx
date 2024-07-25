@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion'
 import Markdown from 'markdown-to-jsx'
-import ImageFallback from '@/components/ImageFallback'
 import React, { memo } from 'react'
-import ToastComponent from '@/components/ToastComponent'
 
 type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean }
 const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage }) => {
@@ -27,9 +25,7 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
       }
     : {}
 
-  if (msg === '') {
-    return null
-  }
+  if (msg === '') return null
 
   return (
     <div className={`flex items-end gap-1 ${isBot ? 'justify-start' : 'justify-end'}`}>
