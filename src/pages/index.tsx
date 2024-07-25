@@ -25,24 +25,30 @@ const Home = () => {
   const tokenRedux = useSelector((state: any) => state.token)
   const token = tokenUrl || tokenRedux
 
+  // loading
   const [isLoadingAI, setIsLoadingAI] = useState(true)
   const [isBotResponding, setIsBotResponding] = useState(false)
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
+
+  // input
   const [message, setMessage] = useState(isHasProblem ? problem : '')
   const [messageApi, setMessageApi] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
 
+  // conversation
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
+
+  // clear data
+  const [clearData, setClearData] = useState<TClearData | null>(null)
   const [onProblemToService, setOnProblemToService] = useState(false)
+  const [onFetchingClearData, setOnFetchingClearData] = useState(false)
 
   const [problemToService, setProblemToService] = useState<TServiceToProblem | null>(null)
 
   const [onDeteleting, setOnDeteleting] = useState(false)
-
-  const [clearData, setClearData] = useState<TClearData | null>(null)
 
   const isFristSendMessageAndHasProblem = isFirstSendMessage && isHasProblem
 
@@ -313,6 +319,11 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService, clearData])
 
+  useEffect(() => {
+    // để gọi lại hàm handleSendMessageApi để lấy ra clear data khi mà content bot trả ra là `''`
+    onFetchingClearData && setOnSendingMessage(true)
+  }, [onFetchingClearData])
+
   return (
     <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
       <Suspense fallback={null}>
@@ -325,7 +336,6 @@ const Home = () => {
           isOpenModalConfirmDelete={isOpenModalConfirmDelete}
         />
       </Suspense>
-
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
         {isLoadingAI ? (
           <Suspense
@@ -359,11 +369,10 @@ const Home = () => {
       <Suspense fallback={null}>
         <FooterInput
           conversation={conversation}
-          isBotResponding={isBotResponding}
           message={message}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
-          isDisabled={isBotResponding || !message.length}
+          isDisabled={isBotResponding || !message.length || !message.trim().length}
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}

@@ -6,7 +6,6 @@ import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
 type FooterInputType = {
   conversation: Message[]
-  isBotResponding: boolean
   message: string
   handleChangeValue: (value: ChangeEvent<HTMLInputElement>) => void
   handleSendMessage: () => void
