@@ -1,3 +1,4 @@
+import { Skeleton } from '@nextui-org/react'
 import { memo } from 'react'
 
 const ConverstaionsSkeleton = () => {
@@ -16,7 +17,7 @@ const SkeletonConversation = ({ index }: { index: number }) => {
 
   return (
     <div className='flex w-full items-center justify-end gap-2' style={{ height: heightStyle, justifyContent: index % 2 === 0 ? 'flex-end' : 'flex-start' }}>
-      <div className='flex h-full w-full max-w-[80%] rounded-lg bg-slate-50' />
+      <Skeleton className='flex h-full w-full max-w-[80%] rounded-lg' />
     </div>
   )
 }

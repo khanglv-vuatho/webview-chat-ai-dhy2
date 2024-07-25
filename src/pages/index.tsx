@@ -1,20 +1,19 @@
+import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNetworkState } from '@uidotdev/usehooks'
+
 import ImageFallback from '@/components/ImageFallback'
-import AILoading from '@/modules/AILoading'
-import Conversation from '@/modules/Conversation'
 import ConverstaionsSkeleton from '@/modules/ConversationsSkeleton'
 import TypewriterEffect from '@/modules/TypewriterEffect'
 import instance from '@/services/axiosConfig'
 import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
-import { CircularProgress } from '@nextui-org/react'
-import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useNetworkState } from '@uidotdev/usehooks'
-import { Refresh2 } from 'iconsax-react'
+
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
+const Conversation = lazy(() => import('@/modules/Conversation'))
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
@@ -376,30 +375,23 @@ const Home = () => {
         />
       </Suspense>
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
-        {onFetchingInitChat ? (
-          <ConverstaionsSkeleton />
-        ) : conversation?.length > 0 ? (
-          <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
-        ) : (
-          <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>
-            <div className='mx-auto h-12 w-16'>
-              <ImageFallback src='/robot.png' className='size-full' />
+        <Suspense fallback={<ConverstaionsSkeleton />}>
+          {onFetchingInitChat ? (
+            <ConverstaionsSkeleton />
+          ) : conversation?.length > 0 ? (
+            <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
+          ) : (
+            <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>
+              <div className='mx-auto h-12 w-16'>
+                <ImageFallback src='/robot.png' className='size-full' />
+              </div>
+              <div className='text-center text-sm'>
+                <TypewriterEffect words={words} />
+              </div>
             </div>
-            <div className='text-center text-sm'>
-              <TypewriterEffect words={words} />
-            </div>
-          </div>
-        )}
+          )}
+        </Suspense>
       </div>
-      {/* <div>
-        {isErrorWhenAIResponding && (
-          <div>
-            123
-            <Refresh2 onClick={handleRetryMessage} />
-          </div>
-        )}
-        456
-      </div> */}
       <Suspense fallback={<SkeletonFooterInput />}>
         <FooterInput
           conversation={conversation}

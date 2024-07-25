@@ -8,10 +8,11 @@ type Props = {
   isLoading?: boolean
 } & ButtonProps
 
-const handlePhoneVibration = () => {
-  postMessageCustom({ message: 'vibrate' })
-}
+type Frequency = 'low' | 'medium' | 'high'
 
+const handlePhoneVibration = (frequency: Frequency = 'low') => {
+  postMessageCustom({ message: `vibrate-${frequency}` })
+}
 export function getRadiusClass(classString: string) {
   // Sử dụng regex để tìm và lấy ra giá trị của `radius-*`
   const match = classString.match(/rounded-[^\s]+/)

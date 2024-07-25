@@ -21,7 +21,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   const dataIsClear = clearData?.isClear
 
-  console.log({ message })
   const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     handleSendMessage()
