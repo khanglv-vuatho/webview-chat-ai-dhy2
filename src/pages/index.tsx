@@ -347,21 +347,15 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService, clearData])
 
+  useEffect(() => {
+    isErrorWhenAIResponding && handleRetryMessage()
+  }, [isErrorWhenAIResponding])
+
   // useEffect(() => {
   //   if (!network.online) {
   //     setIsErrorWhenAIResponding(true)
   //   }
   // }, [network.online])
-
-  useEffect(() => {
-    isErrorWhenAIResponding && handleRetryMessage()
-  }, [isErrorWhenAIResponding])
-
-  useEffect(() => {
-    if (!network.online) {
-      setIsErrorWhenAIResponding(true)
-    }
-  }, [network.online])
   return (
     <div className={`relative flex h-dvh flex-col`}>
       <Suspense fallback={<SkeletonHeader />}>
@@ -375,7 +369,7 @@ const Home = () => {
         />
       </Suspense>
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
-        <Suspense fallback={<ConverstaionsSkeleton />}>
+        <Suspense fallback={null}>
           {onFetchingInitChat ? (
             <ConverstaionsSkeleton />
           ) : conversation?.length > 0 ? (

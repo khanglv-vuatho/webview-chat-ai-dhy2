@@ -11,7 +11,7 @@ const InvalidPage = () => {
           <ImageFallback src='/invalid.png' height={400} width={400} className='size-full' />
         </div>
         <p className='text-sm'>Trình duyệt của bạn không được hỗ trợ</p>
-        <PrimaryOutlineButton isLoading={isLoading} onPress={() => setIsLoading(true)} className='w-full rounded-full opacity-100'>
+        <PrimaryOutlineButton isLoading={isLoading} onClick={() => setIsLoading(true)} className='w-full rounded-full opacity-100'>
           Quay về App
         </PrimaryOutlineButton>
       </div>

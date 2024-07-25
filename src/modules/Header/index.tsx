@@ -1,4 +1,4 @@
-import { PrimaryButton, PrimaryOutlineButton } from '@/components/Buttons'
+import { ButtonOnlyIcon, PrimaryButton, PrimaryOutlineButton } from '@/components/Buttons'
 import ImageFallback from '@/components/ImageFallback'
 import { DefaultModal } from '@/components/Modal'
 import { keyPossmessage } from '@/constants'
@@ -7,7 +7,6 @@ import { postMessageCustom } from '@/utils'
 import { motion } from 'framer-motion'
 import { ArrowLeft2, Refresh2 } from 'iconsax-react'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { ButtonOnlyIcon } from '../Buttons'
 import { Skeleton } from '@nextui-org/react'
 
 type HeaderProps = {
@@ -35,6 +34,12 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
     setIsOpenModalConfirmDelete(false)
   }, [])
 
+  const handleCloseWebview = () => {
+    postMessageCustom({
+      message: keyPossmessage.CAN_POP
+    })
+  }
+
   return (
     <>
       <motion.header
@@ -44,21 +49,14 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         className='sticky left-0 right-0 top-0 z-50 flex items-center justify-between bg-white p-4'
         style={{ zIndex: 10 }}
       >
-        <ButtonOnlyIcon
-          onPress={() =>
-            postMessageCustom({
-              message: keyPossmessage.CAN_POP
-            })
-          }
-          className='outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0'
-        >
+        <ButtonOnlyIcon onClick={handleCloseWebview} className='outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0'>
           <ArrowLeft2 />
         </ButtonOnlyIcon>
         <p className='justify-between text-center text-base font-bold'>{serviceName ? serviceName : 'AI Vua thợ'} </p>
         <ButtonOnlyIcon
           isDisabled={isDisable}
           className={`outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0 ${isHasMessage ? 'opacity-100' : 'opacity-0'}`}
-          onPress={handleClick}
+          onClick={handleClick}
         >
           <Refresh2 className='text-primary-yellow' />
         </ButtonOnlyIcon>
@@ -73,10 +71,10 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
           </div>
           <div className='text-center'>Xác nhận tạo mới cuộc trò chuyện</div>
           <div className='flex items-center gap-4'>
-            <PrimaryOutlineButton className='h-12 rounded-full' onPress={handleCancle}>
+            <PrimaryOutlineButton className='h-12 rounded-full' onClick={handleCancle}>
               Huỷ
             </PrimaryOutlineButton>
-            <PrimaryButton isLoading={onDeteleting} className='h-12 rounded-full' onPress={handleReset}>
+            <PrimaryButton isLoading={onDeteleting} className='h-12 rounded-full' onClick={handleReset}>
               Xác nhận
             </PrimaryButton>
           </div>
