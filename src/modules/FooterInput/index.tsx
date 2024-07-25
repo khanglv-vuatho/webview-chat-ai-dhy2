@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
-import { Button, Input, Textarea } from '@nextui-org/react'
+import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
@@ -46,7 +46,12 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
   }, [sendRef, inputRef, message, clearData, isAnimationClearData])
 
   return (
-    <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.5 }} className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'>
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
+      className='sticky bottom-0 left-0 right-0 flex flex-col gap-2'
+    >
       {isAnimationClearData || dataIsClear ? (
         <div className='p-4'>
           <IndustryItem clear_data={clearData} isAnimationClearData={isAnimationClearData} problemToService={problemToService} />
@@ -90,3 +95,14 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 }
 
 export default memo(FooterInput)
+
+export const SkeletonFooterInput = memo(() => {
+  return (
+    <div className='sticky bottom-0 left-0 right-0 flex flex-col gap-2 p-4'>
+      <div className='flex items-center gap-2'>
+        <Skeleton className='h-[40px] w-full rounded-lg' />
+        <Skeleton className='flex size-10 flex-shrink-0 rounded-full' />
+      </div>
+    </div>
+  )
+})

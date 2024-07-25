@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft2, Refresh2 } from 'iconsax-react'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ButtonOnlyIcon } from '../Buttons'
+import { Skeleton } from '@nextui-org/react'
 
 type HeaderProps = {
   handleReset: () => void
@@ -39,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
       <motion.header
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
+        transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
         className='sticky left-0 right-0 top-0 z-50 flex items-center justify-between bg-white p-4'
         style={{ zIndex: 10 }}
       >
@@ -86,3 +87,13 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
 }
 
 export default memo(Header)
+
+export const SkeletonHeader = memo(() => {
+  return (
+    <div className='sticky left-0 right-0 top-0 z-50 flex items-center justify-between bg-white p-4'>
+      <Skeleton className='size-10 rounded-full' />
+      <Skeleton className='h-[24px] w-[100px] rounded-lg' />
+      <Skeleton className='size-10 rounded-full' />
+    </div>
+  )
+})

@@ -40,7 +40,7 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
             .map((_, index) => (
               <motion.div
                 key={index}
-                className='h-1.5 w-1.5 rounded-full bg-primary-black'
+                className='h-1.5 w-1.5 rounded-full bg-primary-black/40'
                 animate={{
                   y: [0, -4, 0],
                   transition: {
@@ -63,6 +63,15 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                   // Kết hợp strong với các phần tử tiếp theo
                   const text = React.Children.toArray(children).join('')
                   return <strong {...props}>{text}</strong>
+                },
+                code: {
+                  component: 'code',
+                  props: {
+                    style: {
+                      fontFamily: 'Inter sans-serif',
+                      fontSize: '18px'
+                    }
+                  }
                 },
                 ul: {
                   component: 'ul',

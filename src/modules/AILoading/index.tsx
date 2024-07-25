@@ -2,14 +2,14 @@ import { useMotionValue, useSpring } from 'framer-motion'
 import { memo, useEffect } from 'react'
 import GoogleGeminiEffect from '../GoogleGeminiEffect'
 
-const AILoading = ({ handleTimeEnd }: { handleTimeEnd: () => void }) => {
+const AILoading = () => {
   const value = useMotionValue(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (value.get() >= 2) return handleTimeEnd()
+      if (value.get() >= 10) return value.get()
       value.set(value.get() + 0.1)
-    }, 80) // Update every 2000 milliseconds (2 seconds)
+    }, 200) // Update every 2000 milliseconds (2 seconds)
 
     return () => clearInterval(interval)
   }, [value])

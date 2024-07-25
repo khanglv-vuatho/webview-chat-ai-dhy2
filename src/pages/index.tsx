@@ -8,13 +8,24 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 import { CircularProgress } from '@nextui-org/react'
 import { ChangeEvent, lazy, RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNetworkState } from '@uidotdev/usehooks'
+import { Refresh2 } from 'iconsax-react'
+import { SkeletonHeader } from '@/modules/Header'
+import { SkeletonFooterInput } from '@/modules/FooterInput'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
 
 const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
+type TPayload = {
+  content: string
+  id: number | undefined
+  service_id: string | null
+}
+
 const Home = () => {
+  const network = useNetworkState()
   const queryParams = new URLSearchParams(location.search)
   const tokenUrl = queryParams.get('token')
   const lang = queryParams.get('lang') || 'vi'
@@ -26,7 +37,6 @@ const Home = () => {
   const token = tokenUrl || tokenRedux
 
   // loading
-  const [isLoadingAI, setIsLoadingAI] = useState(true)
   const [isBotResponding, setIsBotResponding] = useState(false)
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
@@ -40,6 +50,7 @@ const Home = () => {
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
+  const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
 
   // clear data
   const [clearData, setClearData] = useState<TClearData | null>(null)
@@ -79,14 +90,16 @@ const Home = () => {
       by_me: true,
       content: messageApi.trim(),
       isDisable: true,
-      type: 'text'
+      type: 'text',
+      isSending: false
     }
 
     const botConversation: Message = {
       by_me: false,
       content: '...',
       type: 'text',
-      isDisable: true
+      isDisable: true,
+      isSending: false
     }
 
     // Thêm newConversation trước
@@ -105,61 +118,56 @@ const Home = () => {
     setOnDeteleting(true)
   }, [])
 
-  const handleTimeEnd = useCallback(() => {
-    setIsLoadingAI(false)
-  }, [])
+  const handleCallApiMessage = async (payloadInput?: TPayload) => {
+    const payload: TPayload = {
+      content: isFristSendMessageAndHasProblem ? '' : messageApi.trim(),
+      id: dataInitMessage?.id,
+      service_id: serviceId
+    }
 
-  const handleSendMessageApi = async () => {
-    try {
-      const payload = {
-        content: isFristSendMessageAndHasProblem ? '' : messageApi.trim(),
-        id: dataInitMessage?.id,
-        service_id: serviceId
-      }
+    console.log({ payload })
 
-      if (!isFristSendMessageAndHasProblem) {
-        setMessage('')
-        setMessageApi('')
-      }
+    if (!isFristSendMessageAndHasProblem) {
+      setMessage('')
+      setMessageApi('')
+    }
 
-      setIsBotResponding(true)
-      setIsFirstSendMessage(false)
+    setIsBotResponding(true)
+    setIsFirstSendMessage(false)
+    const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + `${token}`,
+        'Accept-Language': lang
+      },
+      body: JSON.stringify(payloadInput ? payloadInput : payload)
+    })
 
-      const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + `${token}`,
-          'Accept-Language': lang
-        },
-        body: JSON.stringify(payload)
-      })
+    if (!response.body) {
+      throw new Error('ReadableStream not yet supported in this browser.')
+    }
 
-      if (!response.body) {
-        throw new Error('ReadableStream not yet supported in this browser.')
-      }
+    const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
 
-      const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
+    let accumulatedContent = ''
+    let tempContent = ''
+    while (true) {
+      const { value, done } = await reader.read()
 
-      let accumulatedContent = ''
-      let tempContent = ''
+      if (done) {
+        const extractJSON = (input: string) => {
+          const regex = /\[{(.*?)\}\]/s
+          const match = input.match(regex)
+          return match ? match[0] : null
+        }
 
-      while (true) {
-        const { value, done } = await reader.read()
-
-        if (done) {
-          const extractJSON = (input: string) => {
-            const regex = /\[{(.*?)\}\]/s
-            const match = input.match(regex)
-            return match ? match[0] : null
-          }
-
+        try {
           const content: any = JSON?.parse?.(extractJSON?.(tempContent) || '')
-
           if (content?.[0]?.isClear) {
             setClearData(content?.[0])
             setConversation((prev) => {
-              const data = prev.map((item) => {
+              const data = prev?.map((item) => {
                 if (item.content === '...') {
                   item.content = content?.[0]?.message
                   return item
@@ -169,55 +177,65 @@ const Home = () => {
               return [...data]
             })
           }
-
           setIsBotResponding(false)
           setOnProblemToService(true)
-
-          break
+        } catch (error) {
+          console.log(error)
         }
-        // streaming data
-        const lines = value?.split('\n')
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const jsonData = JSON.parse(line.substring(6))
-              if (jsonData.content) {
-                accumulatedContent += jsonData.content
-                tempContent += jsonData.content
-                setConversation((prevConversation) => {
-                  // if has `[` add  content = '...' to render UI
-                  const index = accumulatedContent.indexOf('[')
-                  //khi text cắt ra mà không có content
-                  const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
-                  if (index !== -1) {
-                    // setIsAnimationClearData(true)
-                    setOnProblemToService(true)
-                  }
-                  const result = index !== -1 ? text : accumulatedContent
 
-                  let newConversation: Message = {
-                    by_me: false,
-                    content: result.replace(`\n\n`, ''),
-                    isDisable: true,
-                    type: 'text'
-                  }
+        break
+      }
+      // streaming data
+      const lines = value?.split('\n')
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const jsonData = JSON.parse(line.substring(6))
+            if (jsonData.content) {
+              accumulatedContent += jsonData.content
+              tempContent += jsonData.content
+              setConversation((prevConversation) => {
+                // if has `[` add  content = '...' to render UI
+                const index = accumulatedContent.indexOf('[')
+                //khi text cắt ra mà không có content
+                const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
+                if (index !== -1) {
+                  // setIsAnimationClearData(true)
+                  console.log('first', accumulatedContent.substring(0, index).toString())
+                  setOnProblemToService(true)
+                }
+                const result = index !== -1 ? text : accumulatedContent
 
-                  if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
-                    const updatedConversation = [...prevConversation]
-                    updatedConversation[updatedConversation.length - 1] = newConversation
-                    return updatedConversation
-                  }
+                let newConversation: Message = {
+                  by_me: false,
+                  content: result.replace(`\n\n`, ''),
+                  isDisable: true,
+                  type: 'text',
+                  isSending: false
+                }
 
-                  return [...prevConversation, newConversation]
-                })
-              }
-            } catch (error) {
-              console.error('JSON parse error:', error)
+                if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
+                  const updatedConversation = [...prevConversation]
+                  updatedConversation[updatedConversation.length - 1] = newConversation
+                  return updatedConversation
+                }
+
+                return [...prevConversation, newConversation]
+              })
             }
+          } catch (error) {
+            console.error('JSON parse error:', error)
           }
         }
       }
+    }
+  }
+
+  const handleSendMessageApi = async () => {
+    try {
+      await handleCallApiMessage()
     } catch (error) {
+      setIsErrorWhenAIResponding(true)
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
@@ -240,7 +258,8 @@ const Home = () => {
             by_me: false,
             content: data.clear_data?.[0]?.message,
             isDisable: true,
-            type: 'text'
+            type: 'text',
+            isSending: false
           }
 
           return [...data.data, botMessage]
@@ -291,6 +310,16 @@ const Home = () => {
     }
   }
 
+  const handleRetryMessage = async () => {
+    try {
+      const payload = {}
+      console.log({ conversation })
+      // const data = await handleCallApiMessage()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // fetch init data to use conversation
   useEffect(() => {
     onFetchingInitChat && handleFetchingInitDataOfChating()
@@ -319,14 +348,24 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService, clearData])
 
-  useEffect(() => {
-    // để gọi lại hàm handleSendMessageApi để lấy ra clear data khi mà content bot trả ra là `''`
-    onFetchingClearData && setOnSendingMessage(true)
-  }, [onFetchingClearData])
+  // useEffect(() => {
+  //   if (!network.online) {
+  //     setIsErrorWhenAIResponding(true)
+  //   }
+  // }, [network.online])
 
+  useEffect(() => {
+    isErrorWhenAIResponding && handleRetryMessage()
+  }, [isErrorWhenAIResponding])
+
+  useEffect(() => {
+    if (!network.online) {
+      setIsErrorWhenAIResponding(true)
+    }
+  }, [network.online])
   return (
-    <div className={`relative flex h-dvh ${isLoadingAI ? 'overflow-hidden' : 'overflow-auto'} flex-col`}>
-      <Suspense fallback={null}>
+    <div className={`relative flex h-dvh flex-col`}>
+      <Suspense fallback={<SkeletonHeader />}>
         <Header
           isDisable={isBotResponding}
           handleReset={handleReset}
@@ -337,21 +376,7 @@ const Home = () => {
         />
       </Suspense>
       <div className={`flex flex-1 flex-col gap-2 overflow-auto py-4`}>
-        {isLoadingAI ? (
-          <Suspense
-            fallback={
-              <div className='flex h-dvh w-full items-center justify-center'>
-                <CircularProgress
-                  classNames={{
-                    svg: 'h-8 w-8 text-primary-blue'
-                  }}
-                />
-              </div>
-            }
-          >
-            <AILoading handleTimeEnd={handleTimeEnd} />
-          </Suspense>
-        ) : onFetchingInitChat ? (
+        {onFetchingInitChat ? (
           <ConverstaionsSkeleton />
         ) : conversation?.length > 0 ? (
           <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
@@ -366,13 +391,23 @@ const Home = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={null}>
+      {/* <div>
+        {isErrorWhenAIResponding && (
+          <div>
+            123
+            <Refresh2 onClick={handleRetryMessage} />
+          </div>
+        )}
+        456
+      </div> */}
+      <Suspense fallback={<SkeletonFooterInput />}>
         <FooterInput
           conversation={conversation}
           message={message}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
-          isDisabled={isBotResponding || !message.length || !message.trim().length}
+          // isDisabled={isBotResponding || !message.length || !message.trim().length}
+          isDisabled={isBotResponding || !message.length || !message.trim().length || onFetchingInitChat}
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
