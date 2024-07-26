@@ -196,7 +196,6 @@ const Home = () => {
           setOnProblemToService(true)
         } catch (error) {
           console.log(error)
-          setHasErrorWhenAIResponding(true)
         }
 
         break
@@ -219,7 +218,7 @@ const Home = () => {
                   // setIsAnimationClearData(true)
                   console.log('first', accumulatedContent.substring(0, index).toString())
                   if (accumulatedContent.substring(0, index).toString() === '') {
-                    setHasErrorWhenAIResponding(true)
+                    // setHasErrorWhenAIResponding(true)
                   }
                   setOnProblemToService(true)
                 }
