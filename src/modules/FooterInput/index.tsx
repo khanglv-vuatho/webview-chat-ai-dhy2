@@ -19,6 +19,12 @@ type FooterInputType = {
 const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, setIsFocus }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    })
+  }
 
   const dataIsClear = clearData?.isClear
 
@@ -64,7 +70,11 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               minRows={1}
               maxRows={3}
               autoFocus
-              onFocus={() => setIsFocus(true)}
+              onFocus={() => {
+                setIsFocus(true)
+                scrollToBottom()
+                console.log('123')
+              }}
               ref={inputRef}
               maxLength={500}
               value={message}

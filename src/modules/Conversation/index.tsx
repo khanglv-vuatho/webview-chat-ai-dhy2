@@ -25,7 +25,7 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
           x: 0,
           y: 0
         },
-        transition: { delay: 0.3, duration: 0.2, ease: 'easeInOut' },
+        transition: { delay: 0.1, duration: 0.2, ease: 'easeInOut' },
         viewport: { once: true }
       }
     : {}
