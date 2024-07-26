@@ -6,9 +6,12 @@ import { motion } from 'framer-motion'
 type ConversationType = {
   conversation: Message[]
   isAnimateMessage: boolean
+  hasErrorWhenAIResponding: boolean
+  idMessageError: number | null
+  handleResend: () => void
 }
 
-const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage }) => {
+const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage, hasErrorWhenAIResponding, idMessageError, handleResend }) => {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -30,7 +33,10 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
 
   return (
     <motion.div {...motionProps} className='flex flex-col gap-2 px-4'>
-      {conversation?.map((item, index) => <MessageItem isAnimateMessage={isAnimateMessage} key={index} by_me={item?.by_me} msg={item.content} />)}
+      {conversation?.map((item, index) => {
+        const isHasErrorMessage = hasErrorWhenAIResponding && idMessageError === item?.id
+        return <MessageItem handleResend={handleResend} isHasErrorMessage={isHasErrorMessage} isAnimateMessage={isAnimateMessage} key={index} by_me={item?.by_me} msg={item.content} />
+      })}
       <div ref={bottomRef} /> {/* Bottom reference for auto-scrolling */}
     </motion.div>
   )

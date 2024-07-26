@@ -10,7 +10,6 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
-import { removeLastTwoElements } from '@/utils'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
@@ -51,6 +50,8 @@ const Home = () => {
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
   const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
+  const [hasErrorWhenAIResponding, setHasErrorWhenAIResponding] = useState(false)
+  const [idMessageError, setIdMessageError] = useState<number | null>(null)
 
   // clear data
   const [clearData, setClearData] = useState<TClearData | null>(null)
@@ -91,7 +92,7 @@ const Home = () => {
       content: messageApi.trim(),
       isDisable: true,
       type: 'text',
-      isSending: false
+      id: Date.now()
     }
 
     const botConversation: Message = {
@@ -99,7 +100,7 @@ const Home = () => {
       content: '...',
       type: 'text',
       isDisable: true,
-      isSending: false
+      id: Date.now()
     }
 
     // Thêm newConversation trước
@@ -183,6 +184,7 @@ const Home = () => {
               return [...data]
             })
           }
+          console.log('co chay vao day khong')
           setIsBotResponding(false)
           setOnProblemToService(true)
         } catch (error) {
@@ -217,7 +219,7 @@ const Home = () => {
                   content: result.replace(`\n\n`, ''),
                   isDisable: true,
                   type: 'text',
-                  isSending: false
+                  id: Date.now()
                 }
 
                 if (prevConversation.length > 0 && !prevConversation[prevConversation.length - 1].by_me) {
@@ -245,6 +247,7 @@ const Home = () => {
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
+      console.log('o day nua')
       setIsBotResponding(false)
       setIsAnimateMessage(false)
     }
@@ -265,7 +268,7 @@ const Home = () => {
             content: data.clear_data?.[0]?.message,
             isDisable: true,
             type: 'text',
-            isSending: false
+            id: Date.now()
           }
 
           return [...data.data, botMessage]
@@ -317,47 +320,33 @@ const Home = () => {
   }
 
   const handleRetryMessage = async () => {
-    const lastMessageByMe = conversation.filter((item) => item.by_me).pop()
+    const lastMessageByMe = conversation.filter((item) => item.by_me).slice(-1)[0]
 
-    const lastMessageByBot = conversation.filter((item) => !item.by_me).pop()
+    // Lấy tin nhắn cuối cùng bởi bot
 
-    const lassMessageInConversation = conversation?.pop()
+    // Lấy tin nhắn cuối cùng trong cuộc trò chuyện
+    const lastMessageInConversation = conversation.slice(-1)[0]
 
-    const newMessage: Message = {
-      by_me: true,
-      content: lastMessageByMe?.content.trim() || '',
-      isDisable: true,
-      type: 'text',
-      isSending: false
-    }
-
-    if (lassMessageInConversation?.by_me) {
-      //delete last message by me
-      console.log('123zxczcxcxzcxzcxz')
+    if (lastMessageInConversation?.by_me) {
+      // Không cần làm gì nếu tin nhắn cuối cùng là của tôi
+    } else {
+      // Thay đổi nội dung tin nhắn cuối cùng của bot thành "..."
       setConversation((prevConversation) => {
         const updatedConversation = [...prevConversation]
-        updatedConversation.pop()
-
-        // them newMessage vao cuoi mang updatedConversation
-        // updatedConversation.push(newMessage)
-
-        return updatedConversation
-      })
-    } else {
-      console.log('123zxc')
-      //delete two messages in conversation
-      setConversation((prevConversation) => {
-        // const updatedConversation = removeLastTwoElements(prevConversation)
-        // return [...updatedConversation]
-
-        let updatedConversation = [...prevConversation]
-        // updatedConversation.filter(item => !item.by_me)
-        console.log({ updatedConversation })
-        console.log({ lastMessageByMe })
+        const lastMessageByBotIndex = updatedConversation
+          .slice()
+          .reverse()
+          .findIndex((item) => !item.by_me)
+        if (lastMessageByBotIndex !== -1) {
+          const indexToUpdate = updatedConversation.length - 1 - lastMessageByBotIndex
+          updatedConversation[indexToUpdate] = {
+            ...updatedConversation[indexToUpdate],
+            content: '...'
+          }
+        }
         return updatedConversation
       })
     }
-
     try {
       const payload: TPayload = {
         content: lastMessageByMe?.content.trim() || '',
@@ -370,10 +359,15 @@ const Home = () => {
     } catch (error) {
       console.log(error)
     } finally {
+      setIsBotResponding(false)
       setIsErrorWhenAIResponding(false)
     }
   }
 
+  const handleResendMessage = () => {
+    setIsErrorWhenAIResponding(true)
+    setIdMessageError(null)
+  }
   // fetch init data to use conversation
   useEffect(() => {
     onFetchingInitChat && handleFetchingInitDataOfChating()
@@ -406,11 +400,13 @@ const Home = () => {
     isErrorWhenAIResponding && handleRetryMessage()
   }, [isErrorWhenAIResponding])
 
-  // useEffect(() => {
-  //   if (!network.online) {
-  //     setIsErrorWhenAIResponding(true)
-  //   }
-  // }, [network.online])
+  useEffect(() => {
+    if (conversation.length === 0) return
+    if (!network.online) {
+      setIdMessageError(conversation.filter((item) => item.by_me).slice(-1)[0]?.id)
+      setHasErrorWhenAIResponding(true)
+    }
+  }, [network])
 
   return (
     <div className={`relative flex h-dvh flex-col`}>
@@ -429,7 +425,13 @@ const Home = () => {
           {onFetchingInitChat ? (
             <ConverstaionsSkeleton />
           ) : conversation?.length > 0 ? (
-            <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
+            <Conversation
+              handleResend={handleResendMessage}
+              idMessageError={idMessageError}
+              hasErrorWhenAIResponding={hasErrorWhenAIResponding}
+              isAnimateMessage={isAnimateMessage}
+              conversation={conversation}
+            />
           ) : (
             <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>
               <div className='mx-auto h-12 w-16'>
@@ -442,7 +444,6 @@ const Home = () => {
           )}
         </Suspense>
       </div>
-      {/* <div onClick={() => setIsErrorWhenAIResponding(true)}>resend</div> */}
       <Suspense fallback={<SkeletonFooterInput />}>
         <FooterInput
           conversation={conversation}

@@ -1,9 +1,11 @@
+import { Message } from '@/types'
 import { motion } from 'framer-motion'
+import { InfoCircle } from 'iconsax-react'
 import Markdown from 'markdown-to-jsx'
 import React, { memo } from 'react'
 
-type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean }
-const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage }) => {
+type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean; isHasErrorMessage: boolean; handleResend: () => void }
+const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage, isHasErrorMessage, handleResend }) => {
   const isBot = !by_me
 
   const motionProps = isAnimateMessage
@@ -51,63 +53,81 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
             ))}
         </motion.div>
       ) : (
-        <motion.div {...motionProps} className={`max-w-[70%] break-words rounded-lg p-2 px-3 ${isBot ? 'relative bg-primary-light-gray' : 'bg-[#FFFAEA]'}`}>
-          <Markdown
-            options={{
-              overrides: {
-                component: ({ children, ...props }) => {
-                  // Kết hợp strong với các phần tử tiếp theo
-                  const text = React.Children.toArray(children).join('')
-                  return <strong {...props}>{text}</strong>
-                },
-                code: {
-                  component: 'code',
-                  props: {
-                    style: {
-                      fontFamily: 'Inter sans-serif',
-                      fontSize: '18px'
-                    }
-                  }
-                },
-                ul: {
-                  component: 'ul',
-                  props: {
-                    style: {
-                      listStyleType: 'disc',
-                      marginTop: '4px',
-                      paddingLeft: '20px',
-                      display: 'block'
-                    }
-                  }
-                },
-                ol: {
-                  component: 'ol',
-                  props: {
-                    style: {
-                      listStyleType: 'decimal',
-                      paddingLeft: '4px',
-                      marginTop: '10px',
-                      listStylePosition: 'inside',
-                      display: 'block'
-                    }
-                  }
-                },
-                li: {
-                  component: 'li',
-                  props: {
-                    style: {
-                      marginBottom: '10px',
-                      display: 'block'
-                    }
-                  }
-                }
-              },
-              forceBlock: true
-            }}
+        <div className={`flex w-full flex-col gap-1 ${isBot ? 'items-start' : 'items-end'}`}>
+          <motion.div
+            style={{ opacity: isHasErrorMessage ? 0.5 : 1 }}
+            {...motionProps}
+            className={`max-w-[70%] break-words rounded-lg p-2 px-3 ${isBot ? 'relative bg-primary-light-gray' : 'bg-[#FFFAEA]'}`}
           >
-            {msg}
-          </Markdown>
-        </motion.div>
+            <Markdown
+              options={{
+                overrides: {
+                  component: ({ children, ...props }) => {
+                    // Kết hợp strong với các phần tử tiếp theo
+                    const text = React.Children.toArray(children).join('')
+                    return <strong {...props}>{text}</strong>
+                  },
+                  code: {
+                    component: 'code',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter sans-serif',
+                        fontSize: '18px'
+                      }
+                    }
+                  },
+                  ul: {
+                    component: 'ul',
+                    props: {
+                      style: {
+                        listStyleType: 'disc',
+                        marginTop: '4px',
+                        paddingLeft: '20px',
+                        display: 'block'
+                      }
+                    }
+                  },
+                  ol: {
+                    component: 'ol',
+                    props: {
+                      style: {
+                        listStyleType: 'decimal',
+                        paddingLeft: '4px',
+                        marginTop: '10px',
+                        listStylePosition: 'inside',
+                        display: 'block'
+                      }
+                    }
+                  },
+                  li: {
+                    component: 'li',
+                    props: {
+                      style: {
+                        marginBottom: '10px',
+                        display: 'block'
+                      }
+                    }
+                  }
+                },
+                forceBlock: true
+              }}
+            >
+              {msg}
+            </Markdown>
+          </motion.div>
+          <div
+            style={{
+              display: isHasErrorMessage ? 'flex' : 'none'
+            }}
+            className='flex items-center gap-1 text-primary-red'
+            onClick={handleResend}
+          >
+            <span>
+              <InfoCircle size={14} />
+            </span>
+            <p className='text-xs'>Lỗi mạng, bấm để thử lại</p>
+          </div>
+        </div>
       )}
     </div>
   )

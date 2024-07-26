@@ -149,19 +149,4 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   return result
 }
 
-const removeLastTwoElements = (prevConversation: Message[]) => {
-  // Tạo một bản sao của mảng
-  const newConversation = [...prevConversation]
-
-  // Kiểm tra nếu mảng có ít nhất 2 phần tử và xoá chúng
-  if (newConversation.length >= 2) {
-    newConversation.splice(-2, 2)
-  } else if (newConversation.length === 1) {
-    newConversation.splice(-1, 1)
-  }
-
-  // Trả về mảng mới
-  return newConversation
-}
-
-export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage, removeLastTwoElements }
+export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage }

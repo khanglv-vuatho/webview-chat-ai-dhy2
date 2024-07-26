@@ -15,7 +15,7 @@ export type Message = {
   content: string
   type: 'text' | 'image'
   isDisable: boolean
-  isSending: boolean
+  id: number
 }
 
 type TEnglishOriginal = {
