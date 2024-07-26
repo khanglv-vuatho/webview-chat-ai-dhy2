@@ -31,11 +31,12 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
         viewport: { once: true }
       }
     : {}
-
   return (
     <motion.div {...motionProps} className='flex flex-col gap-2 px-4'>
       {conversation?.map((item, index) => {
         const isHasErrorMessage = hasErrorWhenAIResponding && idMessageError === item?.id && isBotResponding
+        console.log({ hasErrorWhenAIResponding, idMessageError, id: item.id, isBotResponding })
+
         return <MessageItem handleResend={handleResend} isHasErrorMessage={isHasErrorMessage} isAnimateMessage={isAnimateMessage} key={index} by_me={item?.by_me} msg={item.content} />
       })}
       <div ref={bottomRef} /> {/* Bottom reference for auto-scrolling */}

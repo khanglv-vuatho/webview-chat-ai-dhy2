@@ -165,9 +165,9 @@ const Home = () => {
       const { value, done } = await reader.read()
 
       if (done) {
-        // if (tempContent === '') {
-        //   setOnErrorWhenAIResponding(true)
-        // }
+        if (tempContent === '') {
+          setHasErrorWhenAIResponding(true)
+        }
 
         const extractJSON = (input: string) => {
           const regex = /\[{(.*?)\}\]/s
@@ -192,7 +192,6 @@ const Home = () => {
             })
           }
           console.log('co chay vao day khong')
-          setIsBotResponding(false)
           setOnProblemToService(true)
         } catch (error) {
           console.log(error)
@@ -218,7 +217,7 @@ const Home = () => {
                   // setIsAnimationClearData(true)
                   console.log('first', accumulatedContent.substring(0, index).toString())
                   if (accumulatedContent.substring(0, index).toString() === '') {
-                    // setHasErrorWhenAIResponding(true)
+                    setHasErrorWhenAIResponding(true)
                   }
                   setOnProblemToService(true)
                 }
@@ -253,11 +252,10 @@ const Home = () => {
     try {
       await handleCallApiMessage()
     } catch (error) {
-      setOnErrorWhenAIResponding(true)
+      setHasErrorWhenAIResponding(true)
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
-      console.log('o day nua')
       setIsBotResponding(false)
       setIsAnimateMessage(false)
     }
@@ -376,7 +374,6 @@ const Home = () => {
     } catch (error) {
       console.log(error)
     } finally {
-      setIsBotResponding(false)
       setOnErrorWhenAIResponding(false)
     }
   }
