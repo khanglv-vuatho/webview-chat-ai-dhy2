@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
-import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
+import { Button, Skeleton, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
-import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, memo, useEffect, useRef } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
 type FooterInputType = {
   conversation: Message[]
@@ -13,18 +13,11 @@ type FooterInputType = {
   clearData: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  setIsFocus: (value: boolean) => void
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, setIsFocus }) => {
+const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
-    })
-  }
 
   const dataIsClear = clearData?.isClear
 
@@ -70,11 +63,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               minRows={1}
               maxRows={3}
               autoFocus
-              onFocus={() => {
-                setIsFocus(true)
-                scrollToBottom()
-                console.log('123')
-              }}
               ref={inputRef}
               maxLength={500}
               value={message}
@@ -86,8 +74,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               autoCapitalize='off'
               spellCheck='false'
               endContent={
-                <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
-                  <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
+                <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent transition-none' onClick={handleSend}>
+                  <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'}`} />
                 </Button>
               }
               classNames={{

@@ -45,13 +45,12 @@ const Home = () => {
   const [message, setMessage] = useState(isHasProblem ? problem : '')
   const [messageApi, setMessageApi] = useState(isHasProblem ? problem : '')
   const [isFirstSendMessage, setIsFirstSendMessage] = useState(true)
-  const [isFocus, setIsFocus] = useState(false)
 
   // conversation
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
-  // const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
+  const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
 
   // clear data
   const [clearData, setClearData] = useState<TClearData | null>(null)
@@ -242,7 +241,7 @@ const Home = () => {
     try {
       await handleCallApiMessage()
     } catch (error) {
-      // setIsErrorWhenAIResponding(true)
+      setIsErrorWhenAIResponding(true)
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
@@ -320,7 +319,6 @@ const Home = () => {
   const handleRetryMessage = async () => {
     const lastMessageByMe = conversation.filter((item) => item.by_me).pop()
 
-    // Lấy tất cả các phần tử có `by_me` là `false`
     const lastMessageByBot = conversation.filter((item) => !item.by_me).pop()
 
     const lassMessageInConversation = conversation?.pop()
@@ -341,7 +339,7 @@ const Home = () => {
         updatedConversation.pop()
 
         // them newMessage vao cuoi mang updatedConversation
-        updatedConversation.push(newMessage)
+        // updatedConversation.push(newMessage)
 
         return updatedConversation
       })
@@ -349,8 +347,14 @@ const Home = () => {
       console.log('123zxc')
       //delete two messages in conversation
       setConversation((prevConversation) => {
-        const updatedConversation = removeLastTwoElements(prevConversation)
-        return [...updatedConversation]
+        // const updatedConversation = removeLastTwoElements(prevConversation)
+        // return [...updatedConversation]
+
+        let updatedConversation = [...prevConversation]
+        // updatedConversation.filter(item => !item.by_me)
+        console.log({ updatedConversation })
+        console.log({ lastMessageByMe })
+        return updatedConversation
       })
     }
 
@@ -366,7 +370,7 @@ const Home = () => {
     } catch (error) {
       console.log(error)
     } finally {
-      // setIsErrorWhenAIResponding(false)
+      setIsErrorWhenAIResponding(false)
     }
   }
 
@@ -398,9 +402,9 @@ const Home = () => {
     onProblemToService && handleSendingProblemToService()
   }, [onProblemToService, clearData])
 
-  // useEffect(() => {
-  //   isErrorWhenAIResponding && handleRetryMessage()
-  // }, [isErrorWhenAIResponding])
+  useEffect(() => {
+    isErrorWhenAIResponding && handleRetryMessage()
+  }, [isErrorWhenAIResponding])
 
   // useEffect(() => {
   //   if (!network.online) {
@@ -425,7 +429,7 @@ const Home = () => {
           {onFetchingInitChat ? (
             <ConverstaionsSkeleton />
           ) : conversation?.length > 0 ? (
-            <Conversation isFocus={isFocus} setIsErrorWhenAIResponding={() => {}} isAnimateMessage={isAnimateMessage} conversation={conversation} />
+            <Conversation isAnimateMessage={isAnimateMessage} conversation={conversation} />
           ) : (
             <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>
               <div className='mx-auto h-12 w-16'>
@@ -443,10 +447,9 @@ const Home = () => {
         <FooterInput
           conversation={conversation}
           message={message}
-          setIsFocus={setIsFocus}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
-          isDisabled={isBotResponding || !message.length || !message.trim().length || onFetchingInitChat}
+          isDisabled={isBotResponding || !message.length || !message.trim().length}
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
