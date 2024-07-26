@@ -133,8 +133,6 @@ const Home = () => {
       service_id: serviceId
     }
 
-    console.log({ payload })
-
     if (!isFristSendMessageAndHasProblem) {
       setMessage('')
       setMessageApi('')
@@ -191,7 +189,6 @@ const Home = () => {
               return [...data]
             })
           }
-          console.log('co chay vao day khong')
           setOnProblemToService(true)
         } catch (error) {
           console.log(error)
@@ -215,7 +212,6 @@ const Home = () => {
                 const text = accumulatedContent.substring(0, index).toString() == '' ? '...' : accumulatedContent.substring(0, index).toString()
                 if (index !== -1) {
                   // setIsAnimationClearData(true)
-                  console.log('first', accumulatedContent.substring(0, index).toString())
                   if (accumulatedContent.substring(0, index).toString() === '') {
                     setHasErrorWhenAIResponding(true)
                   }
@@ -260,7 +256,7 @@ const Home = () => {
       setIsAnimateMessage(false)
     }
   }
-
+  console.log({ dataInitMessage })
   const handleFetchingInitDataOfChating = async () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
@@ -294,7 +290,8 @@ const Home = () => {
   //handle call api delete history
   const handleDeleteChatHistory = async () => {
     try {
-      await instance.post('/webview/new-extract-problem')
+      const { data } = await instance.post('/webview/new-extract-problem')
+      setDataInitMessage(data)
     } catch (error) {
       console.log(error)
     } finally {
@@ -309,10 +306,26 @@ const Home = () => {
       setIsOpenModalConfirmDelete(false)
       setIsBotResponding(false)
       setOnProblemToService(false)
+      if (problem || serviceId) {
+        if (conversation.length === 0) {
+          setConversation(() => {
+            const placeholderMessage: Message = {
+              by_me: false,
+              content: '...',
+              isDisable: true,
+              type: 'text',
+              id: Date.now()
+            }
+            return [placeholderMessage]
+          })
+        }
+        setOnSendingMessage(true)
+      }
     }
   }
 
   const handleSendingProblemToService = async () => {
+    console.log({ clearData })
     if (!clearData) return
     try {
       const payload = {
@@ -370,7 +383,6 @@ const Home = () => {
       }
 
       await handleCallApiMessage(payload)
-      console.log({ conversation })
     } catch (error) {
       console.log(error)
     } finally {
@@ -398,7 +410,6 @@ const Home = () => {
 
   useEffect(() => {
     if (serviceId || problem) {
-      setOnSendingMessage(true)
       setOnDeteleting(true)
     } else {
       setOnFetchingInitChat(true)

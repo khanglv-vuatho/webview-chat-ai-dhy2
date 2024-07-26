@@ -23,6 +23,15 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
+      {!problemToService?.id && !isAnimationClearData && (
+        <div className='rounded-lg border border-primary-yellow bg-primary-yellow/5 p-2 text-xs'>
+          <div className='text-center'>
+            Hiện tại tôi chưa tìm thấy Thợ này xung quanh bạn.
+            <br />
+            Vui lòng thử lại sau.
+          </div>
+        </div>
+      )}
       <p className='font-bold'>
         <TypewriterEffect words={capitalizeWords(clear_data?.translated_workerName || '')} />
       </p>
@@ -44,9 +53,11 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
             <p className='text-sm'>
               <TypewriterEffect words={clear_data?.translated_summarizeProblem.toString() || ''} />
             </p>
-            <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={isLoading} onClick={handleFindWoker}>
-              Tìm thợ
-            </PrimaryButton>
+            {problemToService?.id !== null && !isAnimationClearData && (
+              <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={isLoading} onClick={handleFindWoker}>
+                Tìm thợ
+              </PrimaryButton>
+            )}
           </>
         )}
       </>

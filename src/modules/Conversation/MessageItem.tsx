@@ -7,7 +7,6 @@ import React, { memo } from 'react'
 type TMessageItemProps = { msg: string; by_me: boolean; isAnimateMessage: boolean; isHasErrorMessage: boolean; handleResend: () => void }
 const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage, isHasErrorMessage, handleResend }) => {
   const isBot = !by_me
-  console.log({ isHasErrorMessage })
   const motionProps = isAnimateMessage
     ? {
         initial: { opacity: 0, x: isBot ? 0 : -100, y: isBot ? 0 : 10 },
@@ -66,15 +65,6 @@ const MessageItem: React.FC<TMessageItemProps> = ({ msg, by_me, isAnimateMessage
                     // Kết hợp strong với các phần tử tiếp theo
                     const text = React.Children.toArray(children).join('')
                     return <strong {...props}>{text}</strong>
-                  },
-                  code: {
-                    component: 'code',
-                    props: {
-                      style: {
-                        fontFamily: 'Inter sans-serif',
-                        fontSize: '18px'
-                      }
-                    }
                   },
                   ul: {
                     component: 'ul',

@@ -75,7 +75,6 @@ export const PrimaryLightButton = ({ className, children, ...props }: Props) => 
     <Button
       {...props}
       onClick={(e) => {
-        console.log('adasdasdas')
         handlePhoneVibration()
         props?.onClick?.(e)
       }}
@@ -95,7 +94,6 @@ export const ButtonOnlyIcon = ({ className, children, ...props }: Props) => {
       {...props}
       isIconOnly
       onClick={(e) => {
-        console.log('adasdasdas')
         handlePhoneVibration()
         props?.onClick?.(e)
       }}
