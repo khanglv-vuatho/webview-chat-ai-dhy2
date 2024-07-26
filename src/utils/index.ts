@@ -149,4 +149,8 @@ const formatDataPostMessage = ({ dataInput, serviceIdApi }: TFormatDataPostMessa
   return result
 }
 
-export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage }
+const handleToastNoNetwork = () => {
+  ToastComponent({ type: 'error', message: 'Không có kết nối mạng, vui lòng kiểm tra lại!' })
+}
+
+export { useUnfocusItem, capitalizeWords, useDebounce, handleAddLangInUrl, formatLocalTime, formatDDMMYYYY, postMessageCustom, formatDataPostMessage, handleToastNoNetwork }

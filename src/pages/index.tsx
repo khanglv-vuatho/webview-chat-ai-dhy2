@@ -10,6 +10,8 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
+import ToastComponent from '@/components/ToastComponent'
+import { handleToastNoNetwork } from '@/utils'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
@@ -80,6 +82,10 @@ const Home = () => {
   }
 
   const handleSendMessage = () => {
+    if (!network.online) {
+      handleToastNoNetwork()
+      return
+    }
     if (message.length === 0) return
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
@@ -210,6 +216,9 @@ const Home = () => {
                 if (index !== -1) {
                   // setIsAnimationClearData(true)
                   console.log('first', accumulatedContent.substring(0, index).toString())
+                  if (accumulatedContent.substring(0, index).toString() === '') {
+                    setIsErrorWhenAIResponding(true)
+                  }
                   setOnProblemToService(true)
                 }
                 const result = index !== -1 ? text : accumulatedContent
@@ -320,6 +329,13 @@ const Home = () => {
   }
 
   const handleRetryMessage = async () => {
+    if (!network.online) {
+      handleToastNoNetwork()
+      return
+    }
+
+    setIdMessageError(null)
+
     const lastMessageByMe = conversation.filter((item) => item.by_me).slice(-1)[0]
 
     // Lấy tin nhắn cuối cùng bởi bot
@@ -366,7 +382,6 @@ const Home = () => {
 
   const handleResendMessage = () => {
     setIsErrorWhenAIResponding(true)
-    setIdMessageError(null)
   }
   // fetch init data to use conversation
   useEffect(() => {
