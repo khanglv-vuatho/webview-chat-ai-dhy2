@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
-import { Button, Skeleton, Textarea } from '@nextui-org/react'
+import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
 import { Send2 } from 'iconsax-react'
-import { ChangeEvent, memo, useEffect, useRef } from 'react'
+import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
 type FooterInputType = {
   conversation: Message[]
@@ -74,8 +74,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               autoCapitalize='off'
               spellCheck='false'
               endContent={
-                <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent transition-none' onClick={handleSend}>
-                  <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'}`} />
+                <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
+                  <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
                 </Button>
               }
               classNames={{
