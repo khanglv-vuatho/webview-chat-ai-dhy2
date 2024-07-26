@@ -51,7 +51,8 @@ const Home = () => {
   const [conversation, setConversation] = useState<Message[]>([])
   const [onSendingMessage, setOnSendingMessage] = useState(false)
   const [onFetchingInitChat, setOnFetchingInitChat] = useState(false)
-  const [isErrorWhenAIResponding, setIsErrorWhenAIResponding] = useState(false)
+  const [onErrorWhenAIResponding, setOnErrorWhenAIResponding] = useState(false)
+
   const [hasErrorWhenAIResponding, setHasErrorWhenAIResponding] = useState(false)
   const [idMessageError, setIdMessageError] = useState<number | null>(null)
 
@@ -165,7 +166,7 @@ const Home = () => {
 
       if (done) {
         // if (tempContent === '') {
-        //   setIsErrorWhenAIResponding(true)
+        //   setOnErrorWhenAIResponding(true)
         // }
 
         const extractJSON = (input: string) => {
@@ -195,6 +196,7 @@ const Home = () => {
           setOnProblemToService(true)
         } catch (error) {
           console.log(error)
+          setHasErrorWhenAIResponding(true)
         }
 
         break
@@ -217,7 +219,7 @@ const Home = () => {
                   // setIsAnimationClearData(true)
                   console.log('first', accumulatedContent.substring(0, index).toString())
                   if (accumulatedContent.substring(0, index).toString() === '') {
-                    setIsErrorWhenAIResponding(true)
+                    setHasErrorWhenAIResponding(true)
                   }
                   setOnProblemToService(true)
                 }
@@ -252,7 +254,7 @@ const Home = () => {
     try {
       await handleCallApiMessage()
     } catch (error) {
-      setIsErrorWhenAIResponding(true)
+      setOnErrorWhenAIResponding(true)
       console.error('Error:', error)
     } finally {
       setOnSendingMessage(false)
@@ -376,12 +378,12 @@ const Home = () => {
       console.log(error)
     } finally {
       setIsBotResponding(false)
-      setIsErrorWhenAIResponding(false)
+      setOnErrorWhenAIResponding(false)
     }
   }
 
   const handleResendMessage = () => {
-    setIsErrorWhenAIResponding(true)
+    setOnErrorWhenAIResponding(true)
   }
   // fetch init data to use conversation
   useEffect(() => {
@@ -412,8 +414,8 @@ const Home = () => {
   }, [onProblemToService, clearData])
 
   useEffect(() => {
-    isErrorWhenAIResponding && handleRetryMessage()
-  }, [isErrorWhenAIResponding])
+    onErrorWhenAIResponding && handleRetryMessage()
+  }, [onErrorWhenAIResponding])
 
   useEffect(() => {
     if (conversation.length === 0) return
@@ -446,6 +448,7 @@ const Home = () => {
               hasErrorWhenAIResponding={hasErrorWhenAIResponding}
               isAnimateMessage={isAnimateMessage}
               conversation={conversation}
+              isBotResponding={isBotResponding}
             />
           ) : (
             <div className='mx-auto flex max-w-[258px] flex-col items-center gap-2'>

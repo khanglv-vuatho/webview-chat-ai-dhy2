@@ -9,9 +9,10 @@ type ConversationType = {
   hasErrorWhenAIResponding: boolean
   idMessageError: number | null
   handleResend: () => void
+  isBotResponding: boolean
 }
 
-const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage, hasErrorWhenAIResponding, idMessageError, handleResend }) => {
+const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessage, hasErrorWhenAIResponding, idMessageError, handleResend, isBotResponding }) => {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
   return (
     <motion.div {...motionProps} className='flex flex-col gap-2 px-4'>
       {conversation?.map((item, index) => {
-        const isHasErrorMessage = hasErrorWhenAIResponding && idMessageError === item?.id
+        const isHasErrorMessage = hasErrorWhenAIResponding && idMessageError === item?.id && isBotResponding
         return <MessageItem handleResend={handleResend} isHasErrorMessage={isHasErrorMessage} isAnimateMessage={isAnimateMessage} key={index} by_me={item?.by_me} msg={item.content} />
       })}
       <div ref={bottomRef} /> {/* Bottom reference for auto-scrolling */}
