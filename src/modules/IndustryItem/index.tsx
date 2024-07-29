@@ -10,14 +10,15 @@ type IndustryItemProps = {
   clear_data: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
+  handleClearConversation: () => void
 }
-const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData, problemToService }) => {
+const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData, problemToService, handleClearConversation }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleFindWoker = () => {
     const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
     postMessageCustom(postMessage)
-
+    handleClearConversation()
     setIsLoading(true)
   }
 

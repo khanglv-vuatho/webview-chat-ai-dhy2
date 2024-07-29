@@ -15,9 +15,10 @@ type FooterInputType = {
   clearData: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
+  handleClearConversation: () => void
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService }) => {
+const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, handleClearConversation }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const { register, handleSubmit, watch } = useForm()
@@ -46,8 +47,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     }
   }, [message])
 
-  console.log({ 'watch message': watch('message') })
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -57,7 +56,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     >
       {isAnimationClearData || dataIsClear ? (
         <div className='p-4'>
-          <IndustryItem clear_data={clearData} isAnimationClearData={isAnimationClearData} problemToService={problemToService} />
+          <IndustryItem handleClearConversation={handleClearConversation} clear_data={clearData} isAnimationClearData={isAnimationClearData} problemToService={problemToService} />
         </div>
       ) : (
         <div className='pt-2'>

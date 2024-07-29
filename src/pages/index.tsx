@@ -393,6 +393,10 @@ const Home = () => {
   const handleResendMessage = () => {
     setOnErrorWhenAIResponding(true)
   }
+
+  const handleClearConversation = () => {
+    setOnDeteleting(true)
+  }
   // fetch init data to use conversation
   useEffect(() => {
     onFetchingInitChat && handleFetchingInitDataOfChating()
@@ -479,6 +483,7 @@ const Home = () => {
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
+          handleClearConversation={handleClearConversation}
         />
       </Suspense>
     </div>
