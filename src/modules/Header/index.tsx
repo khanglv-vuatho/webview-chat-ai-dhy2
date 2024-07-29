@@ -15,9 +15,11 @@ type HeaderProps = {
   onDeteleting: boolean
   isOpenModalConfirmDelete: boolean
   setIsOpenModalConfirmDelete: (value: boolean) => void
-  isDisable: boolean
+  isDisableRefresh: boolean
 }
-const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete, isDisable }) => {
+const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete, isDisableRefresh }) => {
+  const [isDisableButton, setIsDisableButton] = useState(false)
+
   const queryParams = new URLSearchParams(location.search)
   const serviceName = queryParams.get('serviceName')
 
@@ -35,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
   }, [])
 
   const handleCloseWebview = () => {
+    setIsDisableButton(true)
     postMessageCustom({
       message: keyPossmessage.CAN_POP
     })
@@ -49,12 +52,12 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
         className='sticky left-0 right-0 top-0 z-50 flex items-center justify-between bg-white p-4'
         style={{ zIndex: 10 }}
       >
-        <ButtonOnlyIcon onClick={handleCloseWebview} className='outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0'>
+        <ButtonOnlyIcon isDisabled={isDisableButton} onClick={handleCloseWebview} className='outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0'>
           <ArrowLeft2 />
         </ButtonOnlyIcon>
         <p className='justify-between text-center text-base font-bold'>{serviceName ? serviceName : 'AI Vua thợ'} </p>
         <ButtonOnlyIcon
-          isDisabled={isDisable}
+          isDisabled={isDisableRefresh}
           className={`outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:outline-offset-0 ${isHasMessage ? 'opacity-100' : 'opacity-0'}`}
           onClick={handleClick}
         >

@@ -84,7 +84,7 @@ const Home = () => {
       handleToastNoNetwork()
       return
     }
-    if (message.length === 0) return
+    // if (message.length === 0) return
     setMessage('')
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
@@ -436,7 +436,7 @@ const Home = () => {
     <div className={`relative flex h-dvh flex-col`}>
       <Suspense fallback={<SkeletonHeader />}>
         <Header
-          isDisable={isBotResponding}
+          isDisableRefresh={isBotResponding}
           handleReset={handleReset}
           conversation={conversation}
           onDeteleting={onDeteleting}
