@@ -19,6 +19,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
+  const [value, setValue] = useState('')
+
   const dataIsClear = clearData?.isClear
 
   const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -93,7 +95,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
   )
 }
 
-export default memo(FooterInput)
+export default FooterInput
 
 export const SkeletonFooterInput = memo(() => {
   return (
