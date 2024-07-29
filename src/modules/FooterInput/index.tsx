@@ -31,15 +31,26 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   useEffect(() => {
     const inputEl: any = inputRef.current
-
+    let timeoutId: NodeJS.Timeout | null = null
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
         inputEl.focus()
         inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length) // Đặt con trỏ tại cuối văn bản
-        setTimeout(() => {
-          inputEl.value = inputEl.value.slice(0, -1)
+
+        // Thêm một khoảng trắng vào cuối văn bản
+        if (inputEl) {
+          inputEl.value += ' '
+          // Cập nhật giá trị để React nhận diện thay đổi
           handleChangeValue({ target: inputEl } as ChangeEvent<HTMLInputElement>)
-        }, 0)
+
+          timeoutId = setTimeout(() => {
+            if (inputEl) {
+              // Xóa ký tự cuối cùng (bao gồm khoảng trắng)
+              inputEl.value = inputEl.value.slice(0, -2) // Xóa khoảng trắng và ký tự
+              handleChangeValue({ target: inputEl } as ChangeEvent<HTMLInputElement>)
+            }
+          }, 0)
+        }
       } else {
         inputEl?.blur()
       }
@@ -48,6 +59,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     inputEl?.addEventListener('blur', handleBlur)
 
     return () => {
+      timeoutId && clearTimeout(timeoutId)
       inputEl?.removeEventListener('blur', handleBlur)
     }
   }, [message])
