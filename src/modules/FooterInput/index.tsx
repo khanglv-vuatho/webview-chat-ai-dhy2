@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
-import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
+import { Button, input, Input, Skeleton, Textarea } from '@nextui-org/react'
 import { useForm } from 'react-hook-form'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
@@ -31,26 +31,19 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   useEffect(() => {
     const inputEl: any = inputRef.current
-    let timeoutId: NodeJS.Timeout | null = null
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
-        inputEl.focus()
-        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length) // Đặt con trỏ tại cuối văn bản
-
-        // Thêm một khoảng trắng vào cuối văn bản
-        if (inputEl) {
-          inputEl.value += ' '
-          // Cập nhật giá trị để React nhận diện thay đổi
-          handleChangeValue({ target: inputEl } as ChangeEvent<HTMLInputElement>)
-
-          timeoutId = setTimeout(() => {
-            if (inputEl) {
-              // Xóa ký tự cuối cùng (bao gồm khoảng trắng)
-              inputEl.value = inputEl.value.slice(0, -2) // Xóa khoảng trắng và ký tự
-              handleChangeValue({ target: inputEl } as ChangeEvent<HTMLInputElement>)
-            }
-          }, 0)
-        }
+        inputEl?.blur()
+        setTimeout(() => {
+          inputEl.click()
+          setTimeout(() => {
+            inputEl.click()
+          }, 0) // Thời gian chờ 0 để đảm bảo rằng click thứ hai xảy ra ngay sau click thứ nhất
+        }, 0)
+        // inputEl?.blur()
+        // setTimeout(() => {
+        //   inputEl?.focus()
+        // }, 0)
       } else {
         inputEl?.blur()
       }
@@ -59,7 +52,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     inputEl?.addEventListener('blur', handleBlur)
 
     return () => {
-      timeoutId && clearTimeout(timeoutId)
       inputEl?.removeEventListener('blur', handleBlur)
     }
   }, [message])
@@ -84,7 +76,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
               maxRows={3}
               autoFocus
               ref={inputRef}
-              maxLength={500}
+              maxLength={150}
               value={message}
               onChange={handleChangeValue}
               radius='none'

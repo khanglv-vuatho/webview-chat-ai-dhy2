@@ -74,7 +74,7 @@ const Home = () => {
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     //maxLenght 500 characters
-    if (e.target.value.length > 500) return
+    if (e.target.value.length > 150) return
     setMessage(e.target.value)
     setMessageApi(e.target.value)
   }
