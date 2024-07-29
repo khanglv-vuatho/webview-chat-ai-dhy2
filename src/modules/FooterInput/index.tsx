@@ -31,18 +31,15 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
   useEffect(() => {
     const inputEl: any = inputRef.current
+    let timer: NodeJS.Timeout | null = null
+
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
-        // inputEl?.focus()
-        // setTimeout(() => {
-        //   inputEl.click()
-        //   setTimeout(() => {
-        //     inputEl.click()
-        //   }, 0) // Thời gian chờ 0 để đảm bảo rằng click thứ hai xảy ra ngay sau click thứ nhất
-        // }, 0)
-        inputEl?.blur()
-        inputEl?.click()
         inputEl?.focus()
+
+        timer = setTimeout(() => {
+          inputEl?.click()
+        }, 100)
       } else {
         inputEl?.blur()
       }
@@ -52,6 +49,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
 
     return () => {
       inputEl?.removeEventListener('blur', handleBlur)
+      timer && clearTimeout(timer)
     }
   }, [message])
 
