@@ -19,12 +19,9 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  const [value, setValue] = useState('')
-
   const dataIsClear = clearData?.isClear
 
-  const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
+  const handleSend = () => {
     handleSendMessage()
   }
 
@@ -61,7 +58,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
         <div className='pt-2'>
           <p className='px-10 text-center text-xs font-light text-primary-gray'>Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.</p>
           <div className='flex items-end gap-2'>
-            <Textarea
+            {/* <Textarea
               minRows={1}
               maxRows={3}
               autoFocus
@@ -87,7 +84,9 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
                 inputWrapper:
                   'p-1 !min-h-14 border-none bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-0 group-data-[focus-visible=true]:ring-offset-background shadow-none'
               }}
-            />
+            /> */}
+            <textarea value={message} onChange={handleChangeValue as any}></textarea>
+            <div onClick={handleSendMessage}>gui</div>
           </div>
         </div>
       )}
