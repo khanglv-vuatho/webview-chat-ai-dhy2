@@ -391,9 +391,6 @@ const Home = () => {
     setOnErrorWhenAIResponding(true)
   }
 
-  const handleClearConversation = () => {
-    setOnDeteleting(true)
-  }
   // fetch init data to use conversation
   useEffect(() => {
     onFetchingInitChat && handleFetchingInitDataOfChating()
@@ -481,7 +478,8 @@ const Home = () => {
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
           setOnProblemToService={setOnProblemToService}
-          handleClearConversation={handleClearConversation}
+          setOnDeteleting={setOnDeteleting}
+          onDeteleting={onDeteleting}
           isTimeoutApiProblemToService={isTimeoutApiProblemToService}
         />
       </Suspense>

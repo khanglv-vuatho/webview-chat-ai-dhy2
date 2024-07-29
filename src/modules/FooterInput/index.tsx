@@ -15,9 +15,10 @@ type FooterInputType = {
   clearData: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  handleClearConversation: () => void
+  setOnDeteleting: (value: boolean) => void
   isTimeoutApiProblemToService: boolean
   setOnProblemToService: (value: boolean) => void
+  onDeteleting: boolean
 }
 
 const FooterInput: React.FC<FooterInputType> = ({
@@ -28,9 +29,10 @@ const FooterInput: React.FC<FooterInputType> = ({
   clearData,
   isAnimationClearData,
   problemToService,
-  handleClearConversation,
+  setOnDeteleting,
   isTimeoutApiProblemToService,
-  setOnProblemToService
+  setOnProblemToService,
+  onDeteleting
 }) => {
   const { t } = useTranslation()
   const f = t('FooterInput')
@@ -73,8 +75,9 @@ const FooterInput: React.FC<FooterInputType> = ({
         <div className='p-4'>
           <IndustryItem
             isTimeoutApiProblemToService={isTimeoutApiProblemToService}
-            handleClearConversation={handleClearConversation}
+            setOnDeteleting={setOnDeteleting}
             clear_data={clearData}
+            onDeteleting={onDeteleting}
             isAnimationClearData={isAnimationClearData}
             problemToService={problemToService}
             setOnProblemToService={setOnProblemToService}

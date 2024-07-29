@@ -11,32 +11,32 @@ type IndustryItemProps = {
   clear_data: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  handleClearConversation: () => void
+  setOnDeteleting: (value: boolean) => void
   isTimeoutApiProblemToService: boolean
   setOnProblemToService: (value: boolean) => void
+  onDeteleting: boolean
 }
 
-const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, handleClearConversation, setOnProblemToService }) => {
+const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, setOnDeteleting, setOnProblemToService, onDeteleting }) => {
   const { t } = useTranslation()
   const i = t('IndustryItem')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleFindWoker = () => {
-    handleClearConversation()
+    setOnDeteleting(true)
     setIsLoading(true)
   }
 
   const handleTryAgainProblemToService = () => {
     setOnProblemToService(true)
-    setIsLoading(false)
   }
 
   useEffect(() => {
-    if (isLoading) {
+    if (!onDeteleting && isLoading) {
       const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
       postMessageCustom(postMessage)
     }
-  }, [isLoading])
+  }, [onDeteleting, isLoading])
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
@@ -80,7 +80,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
               <TypewriterEffect words={clear_data?.translated_summarizeProblem.toString() || ''} />
             </p>
             {problemToService?.id !== null && !isAnimationClearData && (
-              <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={isLoading} onClick={handleFindWoker}>
+              <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={onDeteleting} onClick={handleFindWoker}>
                 {i?.text7}
               </PrimaryButton>
             )}
