@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
 import { Button, Input, Skeleton, Textarea } from '@nextui-org/react'
+import { useForm } from 'react-hook-form'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
+
 type FooterInputType = {
   conversation: Message[]
   message: string
@@ -18,6 +20,7 @@ type FooterInputType = {
 const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService }) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const { register, handleSubmit, watch } = useForm()
 
   const dataIsClear = clearData?.isClear
 
@@ -43,6 +46,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     }
   }, [message])
 
+  console.log({ 'watch message': watch('message') })
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -58,7 +63,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
         <div className='pt-2'>
           <p className='px-10 text-center text-xs font-light text-primary-gray'>Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.</p>
           <div className='flex items-end gap-2'>
-            {/* <Textarea
+            <Textarea
               minRows={1}
               maxRows={3}
               autoFocus
@@ -84,11 +89,22 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
                 inputWrapper:
                   'p-1 !min-h-14 border-none bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-0 group-data-[focus-visible=true]:ring-offset-background shadow-none'
               }}
-            /> */}
-            <textarea ref={inputRef} value={message} autoComplete='off' autoCorrect='off' autoCapitalize='off' spellCheck='false' onChange={handleChangeValue as any}></textarea>
-            <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
-              <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
-            </Button>
+            />
+            {/* <form onSubmit={handleSubmit(handleSendMessage)}>
+              <textarea
+                {...register('message')}
+                ref={inputRef}
+                value={message}
+                autoComplete='off'
+                autoCorrect='off'
+                autoCapitalize='off'
+                spellCheck='false'
+                onChange={handleChangeValue as any}
+              ></textarea>
+              <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
+                <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
+              </Button>
+            </form> */}
           </div>
         </div>
       )}
