@@ -6,6 +6,7 @@ import { memo, useEffect, useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
 import RenderAILoading from '@/components/RenderAILoading'
 import { useTranslation } from '@/context/translationProvider'
+import instance from '@/services/axiosConfig'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -20,10 +21,20 @@ type IndustryItemProps = {
 const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, setOnDeteleting, setOnProblemToService, onDeteleting }) => {
   const { t } = useTranslation()
   const i = t('IndustryItem')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const handleDeleteChatHistory = async () => {
+    try {
+      await instance.post('/webview/new-extract-problem')
+      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+      postMessageCustom(postMessage)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   const handleFindWoker = () => {
-    setOnDeteleting(true)
     setIsLoading(true)
   }
 
@@ -32,12 +43,8 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
   }
 
   useEffect(() => {
-    if (!onDeteleting && isLoading) {
-      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-      postMessageCustom(postMessage)
-    }
-  }, [onDeteleting, isLoading])
-
+    isLoading && handleDeleteChatHistory()
+  }, [isLoading])
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
       {!problemToService?.id && !isAnimationClearData && !isTimeoutApiProblemToService && (
@@ -80,7 +87,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
               <TypewriterEffect words={clear_data?.translated_summarizeProblem.toString() || ''} />
             </p>
             {problemToService?.id !== null && !isAnimationClearData && (
-              <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={onDeteleting} onClick={handleFindWoker}>
+              <PrimaryButton className='h-12 rounded-full font-bold text-primary-black' isLoading={onDeteleting || isLoading} onClick={handleFindWoker}>
                 {i?.text7}
               </PrimaryButton>
             )}
