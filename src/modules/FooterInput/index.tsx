@@ -33,17 +33,17 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     const inputEl: any = inputRef.current
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
+        // inputEl?.focus()
+        // setTimeout(() => {
+        //   inputEl.click()
+        //   setTimeout(() => {
+        //     inputEl.click()
+        //   }, 0) // Thời gian chờ 0 để đảm bảo rằng click thứ hai xảy ra ngay sau click thứ nhất
+        // }, 0)
         inputEl?.blur()
         setTimeout(() => {
-          inputEl.click()
-          setTimeout(() => {
-            inputEl.click()
-          }, 0) // Thời gian chờ 0 để đảm bảo rằng click thứ hai xảy ra ngay sau click thứ nhất
+          inputEl?.focus()
         }, 0)
-        // inputEl?.blur()
-        // setTimeout(() => {
-        //   inputEl?.focus()
-        // }, 0)
       } else {
         inputEl?.blur()
       }
