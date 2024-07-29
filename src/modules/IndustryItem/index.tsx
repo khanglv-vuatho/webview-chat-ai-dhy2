@@ -19,9 +19,10 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
   const [isLoading, setIsLoading] = useState(false)
 
   const handleFindWoker = () => {
+    handleClearConversation()
+
     const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
     postMessageCustom(postMessage)
-    handleClearConversation()
     setIsLoading(true)
   }
 
