@@ -36,10 +36,6 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
         inputEl?.focus()
-
-        timer = setTimeout(() => {
-          inputEl?.click()
-        }, 100)
       } else {
         inputEl?.blur()
       }
