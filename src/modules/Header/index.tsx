@@ -17,6 +17,7 @@ type HeaderProps = {
   setIsOpenModalConfirmDelete: (value: boolean) => void
   isDisableRefresh: boolean
 }
+
 const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete, isDisableRefresh }) => {
   const [isDisableButton, setIsDisableButton] = useState(false)
 

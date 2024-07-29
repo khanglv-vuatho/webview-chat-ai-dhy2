@@ -2,7 +2,7 @@ import { PrimaryButton } from '@/components/Buttons'
 
 import { TClearData, TServiceToProblem } from '@/types'
 import { capitalizeWords, formatDataPostMessage, postMessageCustom } from '@/utils'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
 import RenderAILoading from '@/components/RenderAILoading'
 
@@ -58,7 +58,7 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
             <RenderAILoading className='left-[-16px] top-[-100px] h-[100px] w-[calc(100%+32px)]' />
           </div>
         ) : isTimeoutApiProblemToService ? (
-          <p className='text-xs text-primary-red'>
+          <p className='text-xs text-primary-gray'>
             Kết nối mạng không ổn đỉnh.{' '}
             <span className='text-primary-yellow underline' onClick={handleTryAgainProblemToService}>
               Thử lại
@@ -81,4 +81,4 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
   )
 }
 
-export default IndustryItem
+export default memo(IndustryItem)
