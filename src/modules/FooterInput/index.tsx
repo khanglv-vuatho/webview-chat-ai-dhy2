@@ -35,6 +35,11 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
         inputEl.focus()
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length) // Đặt con trỏ tại cuối văn bản
+        setTimeout(() => {
+          inputEl.value = inputEl.value.slice(0, -1)
+          handleChangeValue({ target: inputEl } as ChangeEvent<HTMLInputElement>)
+        }, 0)
       } else {
         inputEl?.blur()
       }
@@ -62,7 +67,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
         <div className='pt-2'>
           <p className='px-10 text-center text-xs font-light text-primary-gray'>Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.</p>
           <div className='flex items-end gap-2'>
-            {/* <Textarea
+            <Textarea
               minRows={1}
               maxRows={3}
               autoFocus
@@ -88,22 +93,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
                 inputWrapper:
                   'p-1 !min-h-14 border-none bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-0 group-data-[focus-visible=true]:ring-offset-background shadow-none'
               }}
-            /> */}
-            {/* <form onSubmit={handleSubmit(handleSendMessage)}> */}
-            <textarea
-              // {...register('message')}
-              ref={inputRef}
-              value={message}
-              autoComplete='off'
-              autoCorrect='off'
-              autoCapitalize='off'
-              spellCheck='false'
-              onChange={handleChangeValue as any}
-            ></textarea>
-            <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
-              <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
-            </Button>
-            {/* </form> */}
+            />
           </div>
         </div>
       )}
