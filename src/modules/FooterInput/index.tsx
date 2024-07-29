@@ -29,10 +29,10 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     const inputEl: any = inputRef.current
 
     const handleBlur = (e: any) => {
-      if (!sendRef?.current.contains(e.relatedTarget)) {
-        inputRef?.current?.blur()
+      if (sendRef?.current?.contains(e?.relatedTarget)) {
+        inputEl.focus()
       } else {
-        inputEl.focus() // Focus lại vào input nếu không phải click vào sendRef
+        inputEl?.blur()
       }
     }
 
@@ -41,7 +41,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     return () => {
       inputEl?.removeEventListener('blur', handleBlur)
     }
-  }, [sendRef, inputRef, message, clearData, isAnimationClearData])
+  }, [message])
 
   return (
     <motion.div
