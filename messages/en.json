@@ -5,10 +5,19 @@
     "text3": "Cancel"
   },
   "Body": {
-    "text1": "Hello! Please let me know what kind of worker you need?"
+    "text1": "Hello! Please let me know what kind of Service Provider you need?"
   },
   "FooterInput": {
     "text1": "Vua Thợ AI may cause confusion. Vua Thợ will try to improve.",
     "text2": "Enter your message"
+  },
+  "IndustryItem": {
+    "text1": "Currently, Vua Thợ cannot find this Service Provider around you.",
+    "text2": "Please try again later.",
+    "text3": "Reference price",
+    "text4": "market price",
+    "text5": "Unstable network connection.",
+    "text6": "Retry",
+    "text7": "Find Service Provider"
   }
 }

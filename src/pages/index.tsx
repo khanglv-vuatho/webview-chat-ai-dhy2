@@ -254,7 +254,6 @@ const Home = () => {
     }
   }
 
-  console.log({ dataInitMessage })
   const handleFetchingInitDataOfChating = async () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
@@ -323,7 +322,6 @@ const Home = () => {
   }
 
   const handleSendingProblemToService = async () => {
-    console.log({ clearData })
     if (!clearData) return
     try {
       const payload = {

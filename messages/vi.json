@@ -10,5 +10,14 @@
   "FooterInput": {
     "text1": "Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.",
     "text2": "Nhập tin nhắn"
+  },
+  "IndustryItem": {
+    "text1": "Hiện tại tôi chưa tìm thấy Thợ này xung quanh bạn.",
+    "text2": "Vui lòng thử lại sau.",
+    "text3": "Giá kham khảo",
+    "text4": "đúng giá thị trường",
+    "text5": "Kết nối mạng không ổn đỉnh.",
+    "text6": "Thử lại",
+    "text7": "Tìm thợ"
   }
 }
