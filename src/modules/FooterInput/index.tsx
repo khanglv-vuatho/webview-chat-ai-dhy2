@@ -85,8 +85,10 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
                   'p-1 !min-h-14 border-none bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-0 group-data-[focus-visible=true]:ring-offset-background shadow-none'
               }}
             /> */}
-            <textarea value={message} onChange={handleChangeValue as any}></textarea>
-            <div onClick={handleSendMessage}>gui</div>
+            <textarea value={message} autoComplete='off' autoCorrect='off' autoCapitalize='off' spellCheck='false' onChange={handleChangeValue as any}></textarea>
+            <Button ref={sendRef} isIconOnly isDisabled={isDisabled} radius='full' className='flex items-center justify-center bg-transparent' onClick={handleSend}>
+              <Send2 variant='Bold' className={`${!isDisabled ? 'text-primary-yellow' : 'text-primary-gray'} transition`} />
+            </Button>
           </div>
         </div>
       )}
