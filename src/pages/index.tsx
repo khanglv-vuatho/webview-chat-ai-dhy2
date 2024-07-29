@@ -40,6 +40,7 @@ const Home = () => {
   const [isBotResponding, setIsBotResponding] = useState(false)
   const [isOpenModalConfirmDelete, setIsOpenModalConfirmDelete] = useState(false)
   const [isAnimateMessage, setIsAnimateMessage] = useState(false)
+  const [isTimeoutApiProblemToService, setIsTimeoutApiProblemToService] = useState(false)
 
   // input
   const [message, setMessage] = useState(isHasProblem ? problem : '')
@@ -239,7 +240,7 @@ const Home = () => {
       }
     }
   }
-
+  console.log('123')
   const handleSendMessageApi = async () => {
     try {
       await handleCallApiMessage()
@@ -252,6 +253,7 @@ const Home = () => {
       setIsAnimateMessage(false)
     }
   }
+
   console.log({ dataInitMessage })
   const handleFetchingInitDataOfChating = async () => {
     try {
@@ -331,6 +333,7 @@ const Home = () => {
       setProblemToService(data)
     } catch (error) {
       console.log(error)
+      setIsTimeoutApiProblemToService(true)
     } finally {
       setOnProblemToService(false)
     }
@@ -377,7 +380,6 @@ const Home = () => {
         id: dataInitMessage?.id,
         service_id: serviceId
       }
-
       await handleCallApiMessage(payload)
     } catch (error) {
       console.log(error)
@@ -479,7 +481,9 @@ const Home = () => {
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
+          setOnProblemToService={setOnProblemToService}
           handleClearConversation={handleClearConversation}
+          isTimeoutApiProblemToService={isTimeoutApiProblemToService}
         />
       </Suspense>
     </div>

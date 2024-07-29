@@ -11,8 +11,11 @@ type IndustryItemProps = {
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
   handleClearConversation: () => void
+  isTimeoutApiProblemToService: boolean
+  setOnProblemToService: (value: boolean) => void
 }
-const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClearData, problemToService, handleClearConversation }) => {
+
+const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, handleClearConversation, setOnProblemToService }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleFindWoker = () => {
@@ -22,9 +25,14 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
     setIsLoading(true)
   }
 
+  const handleTryAgainProblemToService = () => {
+    setOnProblemToService(true)
+    setIsLoading(false)
+  }
+
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
-      {!problemToService?.id && !isAnimationClearData && (
+      {!problemToService?.id && !isAnimationClearData && !isTimeoutApiProblemToService && (
         <div className='rounded-lg border border-primary-yellow bg-primary-yellow/5 p-2 text-xs'>
           <div className='text-center'>
             Hiện tại tôi chưa tìm thấy Thợ này xung quanh bạn.
@@ -49,6 +57,13 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isAnimationClea
           <div className='flex h-[110px]'>
             <RenderAILoading className='left-[-16px] top-[-100px] h-[100px] w-[calc(100%+32px)]' />
           </div>
+        ) : isTimeoutApiProblemToService ? (
+          <p className='text-xs text-primary-red'>
+            Kết nối mạng không ổn đỉnh.{' '}
+            <span className='text-primary-yellow underline' onClick={handleTryAgainProblemToService}>
+              Thử lại
+            </span>
+          </p>
         ) : (
           <>
             <p className='text-sm'>

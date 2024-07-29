@@ -1,6 +1,4 @@
 re-call api when content = ''
-css lại dùng textarea thuần
-xử lí trường hợp duplicate chữ
-
-
-AI ơi trả ra cho tôi content = "" để tôi test api
+ xử lí trường hợp duplicate chữ
+ AI ơi trả ra cho tôi content = "" để tôi test api 
+không lạnh, 1 máy, treo tường

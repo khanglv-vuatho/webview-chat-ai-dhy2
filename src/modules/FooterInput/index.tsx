@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import IndustryItem from '../IndustryItem'
 import { Button, input, Input, Skeleton, Textarea } from '@nextui-org/react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Send2 } from 'iconsax-react'
 import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
@@ -16,12 +16,24 @@ type FooterInputType = {
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
   handleClearConversation: () => void
+  isTimeoutApiProblemToService: boolean
+  setOnProblemToService: (value: boolean) => void
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, handleClearConversation }) => {
+const FooterInput: React.FC<FooterInputType> = ({
+  message,
+  handleChangeValue,
+  handleSendMessage,
+  isDisabled,
+  clearData,
+  isAnimationClearData,
+  problemToService,
+  handleClearConversation,
+  isTimeoutApiProblemToService,
+  setOnProblemToService
+}) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const { register, handleSubmit, watch } = useForm()
 
   const dataIsClear = clearData?.isClear
 
@@ -57,7 +69,14 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     >
       {isAnimationClearData || dataIsClear ? (
         <div className='p-4'>
-          <IndustryItem handleClearConversation={handleClearConversation} clear_data={clearData} isAnimationClearData={isAnimationClearData} problemToService={problemToService} />
+          <IndustryItem
+            isTimeoutApiProblemToService={isTimeoutApiProblemToService}
+            handleClearConversation={handleClearConversation}
+            clear_data={clearData}
+            isAnimationClearData={isAnimationClearData}
+            problemToService={problemToService}
+            setOnProblemToService={setOnProblemToService}
+          />
         </div>
       ) : (
         <div className='pt-2'>
