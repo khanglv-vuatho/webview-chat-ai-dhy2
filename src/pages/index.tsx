@@ -10,7 +10,6 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
-import ToastComponent from '@/components/ToastComponent'
 import { handleToastNoNetwork } from '@/utils'
 
 const Header = lazy(() => import('@/modules/Header'))
@@ -159,6 +158,7 @@ const Home = () => {
 
     let accumulatedContent = ''
     let tempContent = ''
+
     while (true) {
       const { value, done } = await reader.read()
 
