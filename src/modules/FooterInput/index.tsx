@@ -41,9 +41,8 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
         //   }, 0) // Thời gian chờ 0 để đảm bảo rằng click thứ hai xảy ra ngay sau click thứ nhất
         // }, 0)
         inputEl?.blur()
-        setTimeout(() => {
-          inputEl?.focus()
-        }, 0)
+        inputEl?.click()
+        inputEl?.focus()
       } else {
         inputEl?.blur()
       }
