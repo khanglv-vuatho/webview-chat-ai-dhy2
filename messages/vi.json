@@ -1,1 +1,14 @@
-{}
+{
+  "Header": {
+    "text1": "Xác nhận",
+    "text2": "Xác nhận tạo mới cuộc trò chuyện",
+    "text3": "Huỷ"
+  },
+  "Body": {
+    "text1": "Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?"
+  },
+  "FooterInput": {
+    "text1": "Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.",
+    "text2": "Nhập tin nhắn"
+  }
+}

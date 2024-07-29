@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion'
-import IndustryItem from '../IndustryItem'
-import { Button, input, Input, Skeleton, Textarea } from '@nextui-org/react'
-import { Controller, useForm } from 'react-hook-form'
-import { Send2 } from 'iconsax-react'
-import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { Message, TClearData, TServiceToProblem } from '@/types'
+import { Button, Skeleton, Textarea } from '@nextui-org/react'
+import { motion } from 'framer-motion'
+import { Send2 } from 'iconsax-react'
+import { ChangeEvent, memo, useEffect, useRef } from 'react'
+import IndustryItem from '../IndustryItem'
+import { useTranslation } from '@/context/translationProvider'
 
 type FooterInputType = {
   conversation: Message[]
@@ -32,6 +32,8 @@ const FooterInput: React.FC<FooterInputType> = ({
   isTimeoutApiProblemToService,
   setOnProblemToService
 }) => {
+  const { t } = useTranslation()
+  const f = t('FooterInput')
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -80,7 +82,7 @@ const FooterInput: React.FC<FooterInputType> = ({
         </div>
       ) : (
         <div className='pt-2'>
-          <p className='px-10 text-center text-xs font-light text-primary-gray'>Vua Thợ AI có thể gây ra nhầm lẫn. Vua Thợ sẽ cố gắng hoàn thiện hơn.</p>
+          <p className='px-10 text-center text-xs font-light text-primary-gray'>{f?.text1}</p>
           <div className='flex items-end gap-2'>
             <Textarea
               minRows={1}
@@ -91,7 +93,7 @@ const FooterInput: React.FC<FooterInputType> = ({
               value={message}
               onChange={handleChangeValue}
               radius='none'
-              placeholder='Nhập tin nhắn'
+              placeholder={f?.text2}
               autoComplete='off'
               autoCorrect='off'
               autoCapitalize='off'

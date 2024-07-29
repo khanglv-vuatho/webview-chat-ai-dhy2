@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft2, Refresh2 } from 'iconsax-react'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Skeleton } from '@nextui-org/react'
+import { useTranslation } from '@/context/translationProvider'
 
 type HeaderProps = {
   handleReset: () => void
@@ -19,6 +20,9 @@ type HeaderProps = {
 }
 
 const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting, isOpenModalConfirmDelete, setIsOpenModalConfirmDelete, isDisableRefresh }) => {
+  const { t } = useTranslation()
+  const h = t('Header')
+
   const [isDisableButton, setIsDisableButton] = useState(false)
 
   const queryParams = new URLSearchParams(location.search)
@@ -71,15 +75,15 @@ const Header: React.FC<HeaderProps> = ({ handleReset, conversation, onDeteleting
             <div className='mx-auto w-[120px]'>
               <ImageFallback src='/robot.png' className='size-full' height={400} width={400} />
             </div>
-            <p>Xác nhận</p>
+            <p>{h?.text1}</p>
           </div>
-          <div className='text-center'>Xác nhận tạo mới cuộc trò chuyện</div>
+          <div className='text-center'>{h?.text2}</div>
           <div className='flex items-center gap-4'>
             <PrimaryOutlineButton className='h-12 rounded-full' onClick={handleCancle}>
-              Huỷ
+              {h?.text3}
             </PrimaryOutlineButton>
             <PrimaryButton isLoading={onDeteleting} className='h-12 rounded-full' onClick={handleReset}>
-              Xác nhận
+              {h?.text1}
             </PrimaryButton>
           </div>
         </div>

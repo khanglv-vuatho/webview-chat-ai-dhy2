@@ -11,12 +11,11 @@ import { Message, TAllMessage, TClearData, TServiceToProblem } from '@/types'
 import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
 import { handleToastNoNetwork } from '@/utils'
+import { useTranslation } from '@/context/translationProvider'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
 const Conversation = lazy(() => import('@/modules/Conversation'))
-
-const words = 'Xin chào! Hãy cho tôi biết bạn đang cần người thợ như thế nào?'
 
 type TPayload = {
   content: string
@@ -32,6 +31,9 @@ const Home = () => {
   const serviceId = queryParams.get('serviceId')
   const problem = queryParams.get('problem')
   const isHasProblem = problem !== null
+
+  const { t } = useTranslation()
+  const b = t('Body')
 
   const tokenRedux = useSelector((state: any) => state.token)
   const token = tokenUrl || tokenRedux
@@ -464,7 +466,7 @@ const Home = () => {
                 <ImageFallback src='/robot.png' className='size-full' />
               </div>
               <div className='text-center text-sm'>
-                <TypewriterEffect words={words} />
+                <TypewriterEffect words={b?.text1} />
               </div>
             </div>
           )}

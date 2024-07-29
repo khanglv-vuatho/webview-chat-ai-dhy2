@@ -1,1 +1,14 @@
-{}
+{
+  "Header": {
+    "text1": "Confirm",
+    "text2": "Confirm creating a new conversation",
+    "text3": "Cancel"
+  },
+  "Body": {
+    "text1": "Hello! Please let me know what kind of worker you need?"
+  },
+  "FooterInput": {
+    "text1": "Vua Thợ AI may cause confusion. Vua Thợ will try to improve.",
+    "text2": "Enter your message"
+  }
+}

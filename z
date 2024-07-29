@@ -2,3 +2,11 @@ re-call api when content = ''
 xử lí trường hợp duplicate chữ
 AI ơi trả ra cho tôi content = "" để tôi test api 
 không lạnh, 1 máy, treo tường
+
+const dummyData = {};
+
+for (let i = 1; i <= 50; i++) {
+  dummyData[`text${i}`] = "";
+}
+
+console.log(dummyData);
