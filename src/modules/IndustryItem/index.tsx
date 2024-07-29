@@ -27,14 +27,13 @@ const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiPro
   const handleDeleteChatHistory = async () => {
     try {
       await instance.post('/webview/new-extract-problem')
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false)
       setTimeout(() => {
         const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
         postMessageCustom(postMessage)
+        setIsLoading(false)
       }, 200)
+    } catch (error) {
+      console.log(error)
     }
   }
   const handleFindWoker = () => {
