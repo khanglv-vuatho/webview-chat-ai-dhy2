@@ -59,7 +59,6 @@ const Home = () => {
   // clear data
   const [clearData, setClearData] = useState<TClearData | null>(null)
   const [onProblemToService, setOnProblemToService] = useState(false)
-  const [onFetchingClearData, setOnFetchingClearData] = useState(false)
 
   const [problemToService, setProblemToService] = useState<TServiceToProblem | null>(null)
 
@@ -218,7 +217,7 @@ const Home = () => {
 
                 let newConversation: Message = {
                   by_me: false,
-                  content: result.replace(`\n\n`, ''),
+                  content: result.replace(`\n\n`, '').replace(`"`, ''),
                   isDisable: true,
                   type: 'text',
                   id: Date.now()
@@ -240,7 +239,6 @@ const Home = () => {
       }
     }
   }
-  console.log('123')
   const handleSendMessageApi = async () => {
     try {
       await handleCallApiMessage()
@@ -331,6 +329,7 @@ const Home = () => {
       }
       const { data } = await instance.post('/webview/problem-to-service', payload)
       setProblemToService(data)
+      setIsTimeoutApiProblemToService(false)
     } catch (error) {
       console.log(error)
       setIsTimeoutApiProblemToService(true)
