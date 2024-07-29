@@ -16,9 +16,20 @@ type FooterInputType = {
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
   handleClearConversation: () => void
+  setMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
-const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, handleSendMessage, isDisabled, clearData, isAnimationClearData, problemToService, handleClearConversation }) => {
+const FooterInput: React.FC<FooterInputType> = ({
+  message,
+  handleChangeValue,
+  handleSendMessage,
+  isDisabled,
+  clearData,
+  isAnimationClearData,
+  problemToService,
+  handleClearConversation,
+  setMessage
+}) => {
   const sendRef: any = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const { register, handleSubmit, watch } = useForm()
@@ -35,6 +46,7 @@ const FooterInput: React.FC<FooterInputType> = ({ message, handleChangeValue, ha
     const handleBlur = (e: any) => {
       if (sendRef?.current?.contains(e?.relatedTarget)) {
         inputEl.focus()
+        setMessage('')
       } else {
         inputEl?.blur()
       }

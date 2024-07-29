@@ -72,8 +72,6 @@ const Home = () => {
     created_at: ''
   })
 
-  const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
-
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     //maxLenght 500 characters
     if (e.target.value.length > 500) return
@@ -89,9 +87,6 @@ const Home = () => {
     if (message.length === 0) return
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
-    setMessage('')
-
-    inputRef?.current?.focus()
 
     const newConversation: Message = {
       by_me: true,
@@ -477,6 +472,7 @@ const Home = () => {
         <FooterInput
           conversation={conversation}
           message={message}
+          setMessage={setMessage}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
           isDisabled={isBotResponding || !message.length || !message.trim().length}
