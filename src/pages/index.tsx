@@ -85,6 +85,7 @@ const Home = () => {
       return
     }
     if (message.length === 0) return
+    setMessage('')
     setOnSendingMessage(true)
     setIsAnimateMessage(true)
 
@@ -472,7 +473,6 @@ const Home = () => {
         <FooterInput
           conversation={conversation}
           message={message}
-          setMessage={setMessage}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
           isDisabled={isBotResponding || !message.length || !message.trim().length}
