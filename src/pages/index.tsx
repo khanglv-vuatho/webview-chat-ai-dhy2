@@ -478,7 +478,7 @@ const Home = () => {
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
           setOnProblemToService={setOnProblemToService}
-          setOnDeteleting={setOnDeteleting}
+          handleDeleteChatHistory={handleDeleteChatHistory}
           onDeteleting={onDeteleting}
           isTimeoutApiProblemToService={isTimeoutApiProblemToService}
         />

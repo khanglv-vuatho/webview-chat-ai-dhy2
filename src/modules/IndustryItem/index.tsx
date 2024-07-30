@@ -12,41 +12,50 @@ type IndustryItemProps = {
   clear_data: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  setOnDeteleting: (value: boolean) => void
+  handleDeleteChatHistory: () => Promise<void>
   isTimeoutApiProblemToService: boolean
   setOnProblemToService: (value: boolean) => void
   onDeteleting: boolean
 }
 
-const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, setOnDeteleting, setOnProblemToService, onDeteleting }) => {
+const IndustryItem: React.FC<IndustryItemProps> = ({
+  clear_data,
+  isTimeoutApiProblemToService,
+  isAnimationClearData,
+  problemToService,
+  handleDeleteChatHistory,
+  setOnProblemToService,
+  onDeteleting
+}) => {
   const { t } = useTranslation()
   const i = t('IndustryItem')
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleDeleteChatHistory = async () => {
-    try {
-      await instance.post('/webview/new-extract-problem')
-      setTimeout(() => {
-        const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-        postMessageCustom(postMessage)
-        setIsLoading(false)
-      }, 200)
-    } catch (error) {
-      console.log(error)
-    }
-  }
   const handleFindWoker = () => {
     setIsLoading(true)
+    handleDeleteChatHistory()
   }
 
   const handleTryAgainProblemToService = () => {
     setOnProblemToService(true)
   }
 
+  const handleDeleteChatApi = async () => {
+    try {
+      await handleDeleteChatHistory()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+      postMessageCustom(postMessage)
+    }
+  }
+
   useEffect(() => {
-    isLoading && handleDeleteChatHistory()
+    isLoading && handleDeleteChatApi()
   }, [isLoading])
+
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
       {!problemToService?.id && !isAnimationClearData && !isTimeoutApiProblemToService && (
