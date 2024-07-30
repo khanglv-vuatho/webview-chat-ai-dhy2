@@ -83,7 +83,7 @@ const Home = () => {
   }
 
   const handleSendMessage = () => {
-    ToastComponent({ message: import.meta.env.VITE_API_URL_TEST, type: 'info' })
+    ToastComponent({ message: import.meta.env.VITE_API_URL, type: 'info' })
     if (!network.online) {
       handleToastNoNetwork()
       return
@@ -140,7 +140,7 @@ const Home = () => {
     setIsBotResponding(true)
     setIsFirstSendMessage(false)
 
-    const response = await fetch(import.meta.env.VITE_API_URL_TEST + '/webview/extract-problem', {
+    const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
