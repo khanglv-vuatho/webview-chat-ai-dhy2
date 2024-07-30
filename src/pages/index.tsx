@@ -220,7 +220,7 @@ const Home = () => {
 
                 let newConversation: Message = {
                   by_me: false,
-                  content: result.replace(`\n\n`, '').replace(`"`, ''),
+                  content: result.replace(`\n\n`, '').replace('```', '').replace('```', '').trim(),
                   isDisable: true,
                   type: 'text',
                   id: Date.now()
@@ -384,6 +384,7 @@ const Home = () => {
       console.log(error)
     } finally {
       setOnErrorWhenAIResponding(false)
+      setIsBotResponding(false)
     }
   }
 

@@ -46,11 +46,9 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
   const handleDeleteChatApi = async () => {
     try {
       await handleDeleteChatHistory()
-      ToastComponent({ message: '123', type: 'success' })
 
       const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
       postMessageCustom(postMessage)
-      ToastComponent({ message: '456', type: 'success' })
     } catch (error) {
       console.log(error)
     } finally {
@@ -60,9 +58,6 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
   useEffect(() => {
     isLoading && handleDeleteChatApi()
   }, [isLoading])
-
-  ToastComponent({ message: problemToService?.id.toString() || '', type: 'success' })
-  ToastComponent({ message: isTimeoutApiProblemToService == true ? 'true' : 'false', type: 'success' })
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
