@@ -8,6 +8,7 @@ import RenderAILoading from '@/components/RenderAILoading'
 import { useTranslation } from '@/context/translationProvider'
 import instance from '@/services/axiosConfig'
 import { keyPossmessage } from '@/constants'
+import ToastComponent from '@/components/ToastComponent'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -44,8 +45,11 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
   const handleDeleteChatApi = async () => {
     try {
       await handleDeleteChatHistory()
+      ToastComponent({ message: '123', type: 'success' })
+
       const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
       postMessageCustom(postMessage)
+      ToastComponent({ message: '456', type: 'success' })
     } catch (error) {
       console.log(error)
     } finally {
