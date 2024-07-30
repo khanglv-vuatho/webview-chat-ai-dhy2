@@ -12,7 +12,6 @@ import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
 import { handleToastNoNetwork } from '@/utils'
 import { useTranslation } from '@/context/translationProvider'
-import ToastComponent from '@/components/ToastComponent'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
@@ -260,7 +259,6 @@ const Home = () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
       setDataInitMessage(data)
-      ToastComponent({ message: data.id, type: 'success' })
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
         setOnProblemToService(true)
@@ -291,7 +289,6 @@ const Home = () => {
     try {
       const { data } = await instance.post('/webview/new-extract-problem')
       setDataInitMessage(data)
-      ToastComponent({ message: data.id, type: 'success' })
     } catch (error) {
       console.log(error)
     } finally {
