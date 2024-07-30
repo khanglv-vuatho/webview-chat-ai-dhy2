@@ -145,6 +145,7 @@ const Home = () => {
         Authorization: 'Bearer ' + `${token}`,
         'Accept-Language': lang
       },
+
       body: JSON.stringify(payloadInput ? payloadInput : payload)
     })
 
