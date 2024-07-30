@@ -34,7 +34,6 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
 
   const handleFindWoker = () => {
     setIsLoading(true)
-    handleDeleteChatHistory()
   }
 
   const handleTryAgainProblemToService = () => {
@@ -47,10 +46,8 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
     } catch (error) {
       console.log(error)
     } finally {
-      setTimeout(() => {
-        const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-        postMessageCustom(postMessage)
-      }, 500)
+      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+      postMessageCustom(postMessage)
     }
   }
 
