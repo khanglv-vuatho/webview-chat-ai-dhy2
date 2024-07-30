@@ -9,6 +9,7 @@ import { useTranslation } from '@/context/translationProvider'
 import instance from '@/services/axiosConfig'
 import { keyPossmessage } from '@/constants'
 import ToastComponent from '@/components/ToastComponent'
+import { calcLength } from 'framer-motion'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -59,6 +60,9 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
   useEffect(() => {
     isLoading && handleDeleteChatApi()
   }, [isLoading])
+
+  ToastComponent({ message: problemToService?.id.toString() || '', type: 'success' })
+  ToastComponent({ message: isTimeoutApiProblemToService == true ? 'true' : 'false', type: 'success' })
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>
