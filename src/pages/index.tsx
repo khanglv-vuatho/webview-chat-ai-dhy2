@@ -261,7 +261,7 @@ const Home = () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
       setDataInitMessage(data)
-
+      ToastComponent({ message: data.id, type: 'success' })
       if (data?.clear_data) {
         setClearData(data.clear_data?.[0])
         setOnProblemToService(true)
