@@ -7,6 +7,7 @@ import TypewriterEffect from '../TypewriterEffect'
 import RenderAILoading from '@/components/RenderAILoading'
 import { useTranslation } from '@/context/translationProvider'
 import instance from '@/services/axiosConfig'
+import { keyPossmessage } from '@/constants'
 
 type IndustryItemProps = {
   clear_data: TClearData | null
@@ -45,7 +46,8 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
       await handleDeleteChatHistory()
       setTimeout(() => {
         const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-        postMessageCustom(postMessage)
+        // postMessageCustom(postMessage)
+        postMessageCustom({ message: keyPossmessage.CAN_POP })
       }, 1000)
     } catch (error) {
       console.log(error)
