@@ -47,8 +47,10 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
     } catch (error) {
       console.log(error)
     } finally {
-      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-      postMessageCustom(postMessage)
+      setTimeout(() => {
+        const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+        postMessageCustom(postMessage)
+      }, 500)
     }
   }
 
