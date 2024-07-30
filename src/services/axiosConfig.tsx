@@ -3,7 +3,7 @@ import ToastComponent from '@/components/ToastComponent'
 import axios, { AxiosResponse } from 'axios'
 
 export const apiConfig = {
-  baseUrl: import.meta.env.VITE_API_URL
+  baseUrl: import.meta.env.VITE_API_URL_TEST
 }
 
 const instance = axios.create({

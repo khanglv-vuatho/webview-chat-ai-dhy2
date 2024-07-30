@@ -138,7 +138,7 @@ const Home = () => {
     setIsBotResponding(true)
     setIsFirstSendMessage(false)
 
-    const response = await fetch(import.meta.env.VITE_API_URL + '/webview/extract-problem', {
+    const response = await fetch(import.meta.env.VITE_API_URL_TEST + '/webview/extract-problem', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
