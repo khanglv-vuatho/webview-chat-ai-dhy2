@@ -43,11 +43,13 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
   const handleDeleteChatApi = async () => {
     try {
       await handleDeleteChatHistory()
+      setTimeout(() => {
+        const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+        postMessageCustom(postMessage)
+      }, 1000)
     } catch (error) {
       console.log(error)
     } finally {
-      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-      postMessageCustom(postMessage)
     }
   }
 
