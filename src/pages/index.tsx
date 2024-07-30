@@ -83,7 +83,6 @@ const Home = () => {
   }
 
   const handleSendMessage = () => {
-    ToastComponent({ message: import.meta.env.VITE_API_URL, type: 'info' })
     if (!network.online) {
       handleToastNoNetwork()
       return
@@ -292,6 +291,7 @@ const Home = () => {
     try {
       const { data } = await instance.post('/webview/new-extract-problem')
       setDataInitMessage(data)
+      ToastComponent({ message: data.id, type: 'success' })
     } catch (error) {
       console.log(error)
     } finally {
