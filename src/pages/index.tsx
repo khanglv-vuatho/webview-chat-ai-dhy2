@@ -12,6 +12,7 @@ import { SkeletonHeader } from '@/modules/Header'
 import { SkeletonFooterInput } from '@/modules/FooterInput'
 import { handleToastNoNetwork } from '@/utils'
 import { useTranslation } from '@/context/translationProvider'
+import ToastComponent from '@/components/ToastComponent'
 
 const Header = lazy(() => import('@/modules/Header'))
 const FooterInput = lazy(() => import('@/modules/FooterInput'))
@@ -82,6 +83,7 @@ const Home = () => {
   }
 
   const handleSendMessage = () => {
+    ToastComponent({ message: import.meta.env.VITE_API_URL_TEST, type: 'info' })
     if (!network.online) {
       handleToastNoNetwork()
       return
