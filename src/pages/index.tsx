@@ -430,6 +430,7 @@ const Home = () => {
       setHasErrorWhenAIResponding(true)
     } else {
       setHasErrorWhenAIResponding(false)
+      setIdMessageError(null)
     }
   }, [network])
 
