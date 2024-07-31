@@ -31,6 +31,7 @@ const Conversation: React.FC<ConversationType> = ({ conversation, isAnimateMessa
         viewport: { once: true }
       }
     : {}
+
   return (
     <motion.div {...motionProps} className='flex flex-col gap-2 px-4'>
       {conversation?.map((item, index) => {

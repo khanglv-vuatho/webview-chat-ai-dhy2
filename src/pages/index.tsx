@@ -428,6 +428,8 @@ const Home = () => {
     if (!network.online) {
       setIdMessageError(conversation.filter((item) => item.by_me).slice(-1)[0]?.id)
       setHasErrorWhenAIResponding(true)
+    } else {
+      setHasErrorWhenAIResponding(false)
     }
   }, [network])
 
