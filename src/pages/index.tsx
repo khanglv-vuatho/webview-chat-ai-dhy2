@@ -258,22 +258,22 @@ const Home = () => {
   const handleFetchingInitDataOfChating = async () => {
     try {
       const { data }: any = await instance.get('/webview/extract-problem')
+      console.log({ data })
       setDataInitMessage(data)
       if (data?.clear_data) {
-        setClearData(data.clear_data?.[0])
-        setOnProblemToService(true)
-
-        setConversation(() => {
-          const botMessage: Message = {
-            by_me: false,
-            content: data.clear_data?.[0]?.message,
-            isDisable: true,
-            type: 'text',
-            id: Date.now()
-          }
-
-          return [...data.data, botMessage]
-        })
+        // setClearData(data.clear_data?.[0])
+        // setOnProblemToService(true)
+        // setConversation(() => {
+        //   const botMessage: Message = {
+        //     by_me: false,
+        //     content: data.clear_data?.[0]?.message,
+        //     isDisable: true,
+        //     type: 'text',
+        //     id: Date.now()
+        //   }
+        //   return [...data.data, botMessage]
+        // })
+        await handleDeleteChatHistory()
       } else {
         setConversation(data.data)
       }
@@ -482,7 +482,6 @@ const Home = () => {
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
           setOnProblemToService={setOnProblemToService}
-          handleDeleteChatHistory={handleDeleteChatHistory}
           onDeteleting={onDeteleting}
           isTimeoutApiProblemToService={isTimeoutApiProblemToService}
         />

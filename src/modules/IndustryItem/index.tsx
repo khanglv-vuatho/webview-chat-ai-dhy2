@@ -2,34 +2,20 @@ import { PrimaryButton } from '@/components/Buttons'
 
 import { TClearData, TServiceToProblem } from '@/types'
 import { capitalizeWords, formatDataPostMessage, postMessageCustom } from '@/utils'
-import { memo, useEffect, useState } from 'react'
+import { memo, useState } from 'react'
 import TypewriterEffect from '../TypewriterEffect'
 import RenderAILoading from '@/components/RenderAILoading'
 import { useTranslation } from '@/context/translationProvider'
-import instance from '@/services/axiosConfig'
-import { keyPossmessage } from '@/constants'
-import ToastComponent from '@/components/ToastComponent'
-import { calcLength } from 'framer-motion'
-
 type IndustryItemProps = {
   clear_data: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  handleDeleteChatHistory: () => Promise<void>
   isTimeoutApiProblemToService: boolean
   setOnProblemToService: (value: boolean) => void
   onDeteleting: boolean
 }
 
-const IndustryItem: React.FC<IndustryItemProps> = ({
-  clear_data,
-  isTimeoutApiProblemToService,
-  isAnimationClearData,
-  problemToService,
-  handleDeleteChatHistory,
-  setOnProblemToService,
-  onDeteleting
-}) => {
+const IndustryItem: React.FC<IndustryItemProps> = ({ clear_data, isTimeoutApiProblemToService, isAnimationClearData, problemToService, setOnProblemToService, onDeteleting }) => {
   const { t } = useTranslation()
   const i = t('IndustryItem')
 
@@ -37,27 +23,13 @@ const IndustryItem: React.FC<IndustryItemProps> = ({
 
   const handleFindWoker = () => {
     setIsLoading(true)
+    const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
+    postMessageCustom(postMessage)
   }
 
   const handleTryAgainProblemToService = () => {
     setOnProblemToService(true)
   }
-
-  const handleDeleteChatApi = async () => {
-    try {
-      await handleDeleteChatHistory()
-
-      const postMessage = formatDataPostMessage({ dataInput: clear_data, serviceIdApi: problemToService?.id })
-      postMessageCustom(postMessage)
-    } catch (error) {
-      console.log(error)
-    } finally {
-    }
-  }
-
-  useEffect(() => {
-    isLoading && handleDeleteChatApi()
-  }, [isLoading])
 
   return (
     <div className='z-50 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-[0px_8px_32px_0px_#00000014]'>

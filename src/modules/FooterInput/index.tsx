@@ -15,7 +15,6 @@ type FooterInputType = {
   clearData: TClearData | null
   isAnimationClearData: boolean
   problemToService: TServiceToProblem | null
-  handleDeleteChatHistory: () => Promise<void>
   isTimeoutApiProblemToService: boolean
   setOnProblemToService: (value: boolean) => void
   onDeteleting: boolean
@@ -29,7 +28,6 @@ const FooterInput: React.FC<FooterInputType> = ({
   clearData,
   isAnimationClearData,
   problemToService,
-  handleDeleteChatHistory,
   isTimeoutApiProblemToService,
   setOnProblemToService,
   onDeteleting
@@ -75,7 +73,6 @@ const FooterInput: React.FC<FooterInputType> = ({
         <div className='p-4'>
           <IndustryItem
             isTimeoutApiProblemToService={isTimeoutApiProblemToService}
-            handleDeleteChatHistory={handleDeleteChatHistory}
             clear_data={clearData}
             onDeteleting={onDeteleting}
             isAnimationClearData={isAnimationClearData}
