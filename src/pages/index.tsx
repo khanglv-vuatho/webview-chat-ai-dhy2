@@ -477,7 +477,7 @@ const Home = () => {
           message={message}
           handleChangeValue={handleChangeValue}
           handleSendMessage={handleSendMessage}
-          isDisabled={isBotResponding || !message.length || !message.trim().length}
+          isDisabled={isBotResponding || !message.length || !message.trim().length || onSendingMessage}
           clearData={clearData}
           isAnimationClearData={onProblemToService}
           problemToService={problemToService}
